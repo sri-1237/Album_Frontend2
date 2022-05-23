@@ -53,9 +53,9 @@ export default {
 
 <style>
 
-@album-width: 180px;
+/* @album-width: 180px;
 @image-size: 156px;
-@border-radius: 4px;
+@border-radius: 4px; */
 
 .album-wrapper {
   margin: 12px;
@@ -63,7 +63,7 @@ export default {
 }
 
 .album {
-  width: @album-width;
+  width: 180px;
   padding: 5px;
   margin: 10px 0 5px 0;
   display: inline-block;
@@ -74,28 +74,28 @@ export default {
 }
   .album-image {
     display: inline-block;
-    width: @image-size;
-    height: @image-size;
+    width: 156px;
+    height: 156px;
     margin: 0 auto;
-    border-radius: @border-radius;
+    border-radius: 4px;
     object-fit: cover;
 
-    &[src=""] {
+    /* &[src=""] {
       background-color: @color-background-transparent;
-    }
+    } */
   }
 
   .album-name {
     display: block;
-    width: @image-size;
+    width: 156px;
     font-size: 16px;
     max-height: 40px;
     overflow: hidden;
     margin: 0 auto;
   }
 
-  &:hover {
+  /* &:hover {
     transform: scale3d(1.05, 1.05, 1);
-  }
+  } */
 
 </style>
