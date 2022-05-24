@@ -1,19 +1,35 @@
 <template>
 
-<div class="card card__big margin-top-xxl">
-    
-<ul class="album-list flex-list">
-    <li  class="album-wrapper" :class="{ active: index == currentIndex }"
-          v-for="(album, index) in albums"
-          :key="index"
-          @click="setActiveTutorial(album, index)"
-        >
-        <router-link :to="{ name: 'Album', params: { album: album.title } }" :class="'album'">
-        <img src="../../assets/beatles.png" class="img-thumbnail album-image" alt="Cinque Terre" width="250" height="150"> 
-          <p>{{ album.title }}</p>
-          </router-link> 
-      
-    </li>
+  <form class="d-flex">
+    <input class="form-control me-2 searchBar" type="text" v-model="title" placeholder="Search by Album title">
+    <button class="btn btn-primary" type="button" @click="searchTitle">Search</button>
+  </form>
+
+  <div class="row">
+    <div class="col-sm-10">
+      <h1>Albums</h1>
+    </div>
+    <div class="col-sm-2">
+      <button type="button" class="btn btn-success" @click="addAlbum()"><i class="fa fa-plus" aria-hidden="true"></i>
+        Add Album</button>
+    </div>
+
+  </div>
+
+
+  <div class="card card__big margin-top-xxl">
+
+    <ul class="album-list flex-list">
+      <li class="album-wrapper" :class="{ active: index == currentIndex }" v-for="(album, index) in albums" :key="index"
+        @click="setActiveTutorial(album, index)">
+        <router-link :to="{ name: 'viewAlbum', params: { id: album.id, album: album.title } }" :class="'album'">
+
+          <img :src="this.currentImage" class="img-thumbnail album-image" alt="Cinque Terre" width="250" height="150">
+          <!-- <a :href="album.data">{{ album.title }}</a> -->
+          <p id="albumTitle">{{ album.title }}</p>
+        </router-link>
+
+      </li>
     </ul>
   </div>
 </template>
@@ -25,26 +41,67 @@ export default {
   name: "albums-list",
   data() {
     return {
-        albums: [],
-      currentTutorial: null,
+      albums: [],
+      // currentTutorial: null,
+      currentImage: undefined,
       currentIndex: -1,
       title: "",
-     
+
     };
-  }, 
-  
+  },
+
   methods: {
-      retrieveAlbums() {
+    retrieveAlbums() {
       AlbumDataService.getAll()
         .then(response => {
           this.albums = response.data;
-          console.log(this.albums)          
+
+          //         const reader = new FileReader();
+          // reader.readAsDataURL(response.data[0].data);
+          console.log("Albums..", response.data.results[0].name);
+
+        //   var arr = new Uint8Array(response.data[0].data)
+        //  console.log("base111...",arr);
+
+         let binary = Buffer.from(response.data[0].data, 'binary'); //or Buffer.from(data, 'binary')
+let imgData = new Blob(binary.buffer, { type: 'application/octet-binary' });
+let link = URL.createObjectURL(imgData);
+
+let img = new Image();
+img.onload = () => URL.revokeObjectURL(link);
+console.log("base111...",link);
+img.src = link;
+
+
+
+
+//           var reader = new FileReader();
+// reader.readAsDataURL(JSON.stringify(response.data[0].data)); 
+// reader.onloadend = function() {
+//   var base64data = reader.result;                
+//   console.log("base...",base64data);
+// }
+        })
+        .catch(e => {
+          this.message = e.response.data.message;
+        });
+    },
+    addAlbum() {
+      this.$router.push({ name: 'addAlbum' });
+    },
+    searchTitle() {
+      AlbumDataService.findByTitle(this.title)
+        .then(response => {
+          this.albums = response.data;
+          console.log("results.", this.albums);
+          // this.setActiveTutorial(null);
+
         })
         .catch(e => {
           this.message = e.response.data.message;
         });
     }
-  },  
+  },
   mounted() {
     this.retrieveAlbums();
   }
@@ -52,7 +109,6 @@ export default {
 </script>
 
 <style>
-
 /* @album-width: 180px;
 @image-size: 156px;
 @border-radius: 4px; */
@@ -71,31 +127,44 @@ export default {
   text-align: center;
   transition: transform 0.3s ease-in-out;
   overflow: hidden;
+  text-decoration: none;
 }
-  .album-image {
-    display: inline-block;
-    width: 156px;
-    height: 156px;
-    margin: 0 auto;
-    border-radius: 4px;
-    object-fit: cover;
 
-    /* &[src=""] {
+.album-image {
+  display: inline-block;
+  width: 156px;
+  height: 156px;
+  margin: 0 auto;
+  border-radius: 4px;
+  object-fit: cover;
+
+  /* &[src=""] {
       background-color: @color-background-transparent;
     } */
-  }
+}
 
-  .album-name {
-    display: block;
-    width: 156px;
-    font-size: 16px;
-    max-height: 40px;
-    overflow: hidden;
-    margin: 0 auto;
-  }
+.album-name {
+  display: block;
+  width: 156px;
+  font-size: 16px;
+  max-height: 40px;
+  overflow: hidden;
+  margin: 0 auto;
+}
 
-  /* &:hover {
+#albumTitle {
+  color: white;
+}
+
+.card {
+  background-color: #212529 !important;
+}
+
+.searchBar {
+  width: 60% !important;
+}
+
+/* &:hover {
     transform: scale3d(1.05, 1.05, 1);
   } */
-
 </style>

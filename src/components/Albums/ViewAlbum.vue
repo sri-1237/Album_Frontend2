@@ -2,6 +2,10 @@
     <h2>Album View</h2>
     <h4>{{ message }}</h4>
     <h3> {{album.title}}</h3>
+    <img :src="this.currentImage" class="img-thumbnail album-image" alt="Cinque Terre" width="350" height="350"> 
+    <p>Artist : <strong>{{album.artist}}</strong></p>
+    <h5> Description</h5>
+    <p> {{album.description}}</p>
     <button color="success" @click="goEditTutorial()"
     >Edit</button>
      <button color="success" @click="goAddLesson(id)"
