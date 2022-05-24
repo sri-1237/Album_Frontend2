@@ -9,6 +9,18 @@ class AlbumDataService {
   create(data) {
     return http.post("/albums", data);
   }
+
+  createAlbum(title, file, onUploadProgress) {
+    let formData = new FormData();
+    formData.append("file", file);
+    return http.post(`/albums?title=${title}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data"
+      },
+      onUploadProgress
+    });
+  }
+
   update(id, data) {
     return http.put(`/albums/${id}`, data);
   }
@@ -22,4 +34,6 @@ class AlbumDataService {
     return http.get(`/albums?title=${title}`);
   }
 }
+
+
 export default new AlbumDataService();

@@ -11,7 +11,7 @@
                             <div class="d-flex flex-row align-items-center">
 
                                 <i class="fa fa-music color"></i>
-                                <small class="ml-2"> {{ track.title }} </small>
+                                <small class="ml-2" id="trackTitle"> {{ track.title }} </small>
                                 
                             </div>
                             <i class="fa fa-check color"></i>
@@ -61,7 +61,13 @@ body{
 }
 
 .card{
+    background-color: #212529;
     border:none;
+}
+
+#trackTitle{
+    color: white;
+    padding-left: 10px;
 }
 
 

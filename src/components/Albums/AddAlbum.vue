@@ -16,7 +16,17 @@
       <label for="formFile" class="form-label"> Cover Image</label>
     </div>
     <div class="col-sm-8">
-      <input class="form-control" type="file" v-on="album.coverImg" id="formFile">
+      <input class="form-control" type="file" ref="file" @change="selectFile" id="formFile">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-2">
+      <label for="albumArtist"> Artist</label>
+    </div>
+    <div class="col-sm-8">
+      <input type="text" class="form-control" v-model="album.artist" id="album-artist" placeholder="Enter Artist Name"
+        name="title">
     </div>
   </div>
 
@@ -35,7 +45,7 @@
     </div>
 
     <div class="col-sm-6">
-      <div class="form-group d-flex flex-row align-items-center" v-for="(input, k) in inputs" :key="k">
+      <div class="form-group d-flex flex-row align-items-center trackInput" v-for="(input, k) in inputs" :key="k">
         <input type="text" class="form-control" v-model="input.name" placeholder="Enter Song URL">
         <span id="add-delete-icons">
           <i class="fas fa-minus-circle" @click="remove(k)" v-show="k || (!k && inputs.length > 1)"></i>
@@ -74,11 +84,27 @@ export default {
           albumId: ""
         }
       ],
-      message: "Enter data and click save"
+      message: "Enter data and click save",
+      selectedFiles: undefined,
+      currentFile: undefined,
+      progress: 0, 
+      fileInfos: []
     };
   },
   methods: {
+    selectFile() {
+      this.selectedFiles = this.$refs.file.files;
+    },
     saveAlbum() {
+      // this.currentFile = this.selectedFiles.item(0);
+
+      this.currentImage = this.$refs.file.files.item(0);
+
+      console.log("Imggg...",this.currentFile);
+
+      // this.previewImage = URL.createObjectURL(this.currentImage);
+
+      // console.log("Imggg 2222...",this.previewImage);
 
       var data = {
         title: this.album.title,
@@ -86,7 +112,7 @@ export default {
       };
 
       console.log("Data..", data);
-      AlbumDataService.create(data)
+      AlbumDataService.createAlbum(this.album.title, this.currentImage)
         .then(response => {
           this.album.id = response.data.id;
           console.log("add album " + response.data);
@@ -131,13 +157,20 @@ export default {
   padding: 15px;
 }
 
+.trackInput{
+  padding-bottom: 10px;
+}
+
 #add-delete-icons
 {
+  font-size: 25px;
+    margin-left: 10px;
+    color: #ffffff;
   display: flex;
 }
 
 button {
   padding: 5px 20px;
-  margin: 10px;
+  margin: 20px !important;
 }
 </style>
