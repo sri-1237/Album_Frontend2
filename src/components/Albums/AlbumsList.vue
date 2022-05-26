@@ -58,29 +58,36 @@ export default {
 
           //         const reader = new FileReader();
           // reader.readAsDataURL(response.data[0].data);
-          console.log("Albums..", response.data.results[0].name);
-
-        //   var arr = new Uint8Array(response.data[0].data)
-        //  console.log("base111...",arr);
-
-         let binary = Buffer.from(response.data[0].data, 'binary'); //or Buffer.from(data, 'binary')
-let imgData = new Blob(binary.buffer, { type: 'application/octet-binary' });
-let link = URL.createObjectURL(imgData);
-
-let img = new Image();
-img.onload = () => URL.revokeObjectURL(link);
-console.log("base111...",link);
-img.src = link;
 
 
+          //   var arr = new Uint8Array(response.data[0].data)
+          console.log("data...", response.data[0].data);
+
+          // var test = URL.createObjectURL(response.data[0].data);
+          //  console.log("Albums..", test);
+
+          //           let buff = new (data);
+          // let base64data = buff.toString('base64');
 
 
-//           var reader = new FileReader();
-// reader.readAsDataURL(JSON.stringify(response.data[0].data)); 
-// reader.onloadend = function() {
-//   var base64data = reader.result;                
-//   console.log("base...",base64data);
-// }
+          //          let binary = Buffer.from(response.data[0].data, 'binary'); //or Buffer.from(data, 'binary')
+          // let imgData = new Blob(binary.buffer, { type: 'application/octet-binary' });
+          // let link = URL.createObjectURL(imgData);
+
+          // let img = new Image();
+          // img.onload = () => URL.revokeObjectURL(link);
+          // console.log("base111...",link);
+          // img.src = link;
+
+
+
+
+          //           var reader = new FileReader();
+          // reader.readAsDataURL(JSON.stringify(response.data[0].data)); 
+          // reader.onloadend = function() {
+          //   var base64data = reader.result;                
+          //   console.log("base...",base64data);
+          // }
         })
         .catch(e => {
           this.message = e.response.data.message;

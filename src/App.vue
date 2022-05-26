@@ -2,17 +2,17 @@
   <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
     <div class="container-fluid">
 
-   
-    <router-link to="/" class="navbar-brand">
-<img :src="logo" width="100" height="80" />
-    Music Info
-    </router-link>
 
-    <!-- <form class="d-flex">
+      <router-link to="/" class="navbar-brand">
+        <img :src="logo" width="100" height="80" />
+        Music Info
+      </router-link>
+
+      <!-- <form class="d-flex">
         <input class="form-control me-2 searchBar" type="text" v-model="title" placeholder="Search by Album title">
         <button class="btn btn-primary" type="button" @click="searchTitle">Search</button>
       </form> -->
-   </div>
+    </div>
   </nav>
   <div class="container mt-3">
     <router-view />
@@ -28,12 +28,12 @@ export default {
   name: "app",
   data: () => ({
     logo,
-     title: "",
-      albums: [],
+    title: "",
+    albums: [],
   }),
 
-   methods: {
-     searchTitle() {
+  methods: {
+    searchTitle() {
       AlbumDataService.findByTitle(this.title)
         .then(response => {
           this.albums = response.data;
@@ -45,7 +45,7 @@ export default {
           this.message = e.response.data.message;
         });
     }
-   }
+  }
 };
 </script>
 
@@ -60,9 +60,9 @@ export default {
   background-image: linear-gradient(to bottom right, #ff7e3d, #dc3545);
 }
 
-.searchBar{
+.searchBar {
   width: 450px;
-    height: 40px;
-    margin-top: 20px;
+  height: 40px;
+  margin-top: 20px;
 }
 </style>

@@ -87,7 +87,7 @@ export default {
       message: "Enter data and click save",
       selectedFiles: undefined,
       currentFile: undefined,
-      progress: 0, 
+      progress: 0,
       fileInfos: []
     };
   },
@@ -100,7 +100,7 @@ export default {
 
       this.currentImage = this.$refs.file.files.item(0);
 
-      console.log("Imggg...",this.currentFile);
+      console.log("Imggg...", this.currentFile);
 
       // this.previewImage = URL.createObjectURL(this.currentImage);
 
@@ -117,21 +117,21 @@ export default {
           this.album.id = response.data.id;
           console.log("add album " + response.data);
           console.log("inputs..", this.inputs);
-          for(var i in this.inputs) {
+          for (var i in this.inputs) {
             var trackdata = {
               title: this.inputs[i].name
             };
-             TracksDataService.createTrack(this.album.id, trackdata)
-            .then(response => {
-              this.tracks = response.data
-              console.log("Tracks...", this.tracks);
-              
-            })
-            .catch(e => {
-              this.message = e.response.data.message;
-            });
+            TracksDataService.createTrack(this.album.id, trackdata)
+              .then(response => {
+                this.tracks = response.data
+                console.log("Tracks...", this.tracks);
+
+              })
+              .catch(e => {
+                this.message = e.response.data.message;
+              });
           }
-          this.$router.push({ name: 'viewAlbum', params: { id: this.album.id, album: this.album.title } });        
+          this.$router.push({ name: 'viewAlbum', params: { id: this.album.id, album: this.album.title } });
 
         })
         .catch(e => {
@@ -157,15 +157,14 @@ export default {
   padding: 15px;
 }
 
-.trackInput{
+.trackInput {
   padding-bottom: 10px;
 }
 
-#add-delete-icons
-{
+#add-delete-icons {
   font-size: 25px;
-    margin-left: 10px;
-    color: #ffffff;
+  margin-left: 10px;
+  color: #ffffff;
   display: flex;
 }
 
