@@ -2,7 +2,7 @@
     <h2>Album View</h2>
     <h4>{{ message }}</h4>
     <h3> {{album.title}}</h3>
-    <img :src="this.currentImage" class="img-thumbnail album-image" alt="Cinque Terre" width="350" height="350"> 
+    <img  :src="album.imgURL" class="img-thumbnail album-image" id="img" alt="Album Image" width="350" height="350"> 
     <p>Artist : <strong>{{album.artist}}</strong></p>
     <h5> Description</h5>
     <p> {{album.description}}</p>
@@ -34,6 +34,7 @@
 import AlbumDataService from "../../services/AlbumDataService";
 import TracksDataService from "../../services/TracksDataService";
 import TracksDisplay from '../Tracks/TracksDisplay.vue';
+import { Buffer } from 'buffer';
 
 export default {
   name: "view-album",
@@ -52,7 +53,17 @@ export default {
     retrieveTracks() {
       AlbumDataService.get(this.id)
         .then(response => {
-          this.album = response.data;
+          // this.album = response.data;
+          var arr = new Array(response.data);
+         
+            let resData = arr[0];
+            var blobObj = resData.data;
+            var bufferBase64 = new Buffer(blobObj.data, 'binary').toString('base64');
+            var imgBase64 = "data:image/jpeg;base64," + bufferBase64;
+            arr[0]["imgURL"] = imgBase64;
+
+            this.album = arr[0];   
+
           TracksDataService.getAllTracks(this.id)
             .then(response=> {
               this.tracks = response.data
@@ -96,4 +107,9 @@ export default {
 </script>
 
 <style>
+
+#img{
+  height: 200px;
+    width: 20%;
+}
 </style>

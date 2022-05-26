@@ -25,7 +25,7 @@
         @click="setActiveTutorial(album, index)">
         <router-link :to="{ name: 'viewAlbum', params: { id: album.id, album: album.title } }" :class="'album'">
 
-          <img :src="this.currentImage" class="img-thumbnail album-image" alt="Cinque Terre" width="250" height="150">
+          <img :src="album.imgURL" class="img-thumbnail album-image" id="img" alt="Album Image">
           <!-- <a :href="album.data">{{ album.title }}</a> -->
           <p id="albumTitle">{{ album.title }}</p>
         </router-link>
@@ -56,21 +56,19 @@ export default {
     retrieveAlbums() {
       AlbumDataService.getAll()
         .then(response => {
-          this.albums = response.data;
+          // this.albums = response.data;
 
           var arr = new Array(response.data);
-
-          console.log("AA..", arr[0])
-
-          for (var i in arr) {
+          for (var i in arr[0]) {
             let resData = arr[0][i];
             var blobObj = resData.data;
 
             var bufferBase64 = new Buffer(blobObj.data, 'binary').toString('base64');
-            console.log("Albums12333..", bufferBase64);
-
             this.currentImage = "data:image/jpeg;base64," + bufferBase64;
+            arr[0][i]["imgURL"] = this.currentImage;
+
           }
+          this.albums = arr[0];
 
         })
         .catch(e => {
@@ -104,6 +102,11 @@ export default {
 /* @album-width: 180px;
 @image-size: 156px;
 @border-radius: 4px; */
+
+#img
+{
+  height: 190px;
+}
 
 .album-wrapper {
   margin: 12px;
