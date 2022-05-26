@@ -108,8 +108,8 @@ export default {
 
 <style>
 
-#img{
+/* #img{
   height: 200px;
     width: 20%;
-}
+} */
 </style>
