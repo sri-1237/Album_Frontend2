@@ -20,9 +20,12 @@
 
   <div class="card card__big margin-top-xxl">
 
+    <h4 id="notFound" v-if="!albums.length">No Albums Found!</h4>
+
     <ul class="album-list flex-list">
       <li class="album-wrapper" :class="{ active: index == currentIndex }" v-for="(album, index) in albums" :key="index"
         @click="setActiveTutorial(album, index)">
+        
         <router-link :to="{ name: 'viewAlbum', params: { id: album.id, album: album.title } }" :class="'album'">
 
           <img :src="album.imgURL" class="img-thumbnail album-image" id="img" alt="Album Image">
@@ -59,13 +62,18 @@ export default {
           // this.albums = response.data;
 
           var arr = new Array(response.data);
-          for (var i in arr[0]) {
-            let resData = arr[0][i];
-            var blobObj = resData.data;
 
+          for (var i in arr[0]) {
+             
+            let resData = arr[0][i];
+            if(resData.data != null)
+          {
+            var blobObj = resData.data;
             var bufferBase64 = new Buffer(blobObj.data, 'binary').toString('base64');
             this.currentImage = "data:image/jpeg;base64," + bufferBase64;
             arr[0][i]["imgURL"] = this.currentImage;
+          }
+            
 
           }
           this.albums = arr[0];
@@ -157,6 +165,11 @@ export default {
 
 .searchBar {
   width: 60% !important;
+}
+
+#notFound{
+  color:white;
+  margin-top: 30px;
 }
 
 /* &:hover {
