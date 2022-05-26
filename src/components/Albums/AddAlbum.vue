@@ -85,22 +85,24 @@ export default {
         }
       ],
       message: "Enter data and click save",
-      selectedFiles: undefined,
+      selectedFile: null,
       currentFile: undefined,
       progress: 0, 
       fileInfos: []
     };
   },
   methods: {
-    selectFile() {
-      this.selectedFiles = this.$refs.file.files;
+    selectFile(event) {
+      this.selectedFile = event.target.files[0];
+      
+      console.log("test image...", this.selectedFile);
     },
     saveAlbum() {
       // this.currentFile = this.selectedFiles.item(0);
 
       this.currentImage = this.$refs.file.files.item(0);
 
-      console.log("Imggg...",this.currentFile);
+      console.log("Imggg...",this.selectedFile);
 
       // this.previewImage = URL.createObjectURL(this.currentImage);
 
@@ -112,7 +114,7 @@ export default {
       };
 
       console.log("Data..", data);
-      AlbumDataService.createAlbum(this.album.title, this.currentImage)
+      AlbumDataService.createAlbum(this.album.title, this.selectedFile)
         .then(response => {
           this.album.id = response.data.id;
           console.log("add album " + response.data);

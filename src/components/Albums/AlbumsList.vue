@@ -17,6 +17,7 @@
   </div>
 
 
+
   <div class="card card__big margin-top-xxl">
 
     <ul class="album-list flex-list">
@@ -36,6 +37,7 @@
 
 <script>
 import AlbumDataService from "../../services/AlbumDataService";
+import { Buffer } from 'buffer';
 
 export default {
   name: "albums-list",
@@ -56,33 +58,23 @@ export default {
         .then(response => {
           this.albums = response.data;
 
-          //         const reader = new FileReader();
-          // reader.readAsDataURL(response.data[0].data);
-          console.log("Albums..", response.data.results[0].name);
+          var arr = new Array(response.data);
 
-        //   var arr = new Uint8Array(response.data[0].data)
-        //  console.log("base111...",arr);
+          console.log("AA..", arr[0])
 
-         let binary = Buffer.from(response.data[0].data, 'binary'); //or Buffer.from(data, 'binary')
-let imgData = new Blob(binary.buffer, { type: 'application/octet-binary' });
-let link = URL.createObjectURL(imgData);
+          for (var i in arr) {
+            let resData = arr[0][i];
+            var blobObj = resData.data;
 
-let img = new Image();
-img.onload = () => URL.revokeObjectURL(link);
-console.log("base111...",link);
-img.src = link;
+            var bufferBase64 = new Buffer(blobObj.data, 'binary').toString('base64');
+            console.log("Albums12333..", bufferBase64);
 
+            this.currentImage = "data:image/jpeg;base64," + bufferBase64;
+          }
 
-
-
-//           var reader = new FileReader();
-// reader.readAsDataURL(JSON.stringify(response.data[0].data)); 
-// reader.onloadend = function() {
-//   var base64data = reader.result;                
-//   console.log("base...",base64data);
-// }
         })
         .catch(e => {
+          console.log("err..", e);
           this.message = e.response.data.message;
         });
     },
