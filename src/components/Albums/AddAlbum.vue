@@ -110,11 +110,12 @@ export default {
 
       var data = {
         title: this.album.title,
+        artist: this.album.artist,
         description: this.album.description
       };
 
       console.log("Data..", data);
-      AlbumDataService.createAlbum(this.album.title, this.selectedFile)
+      AlbumDataService.createAlbum(data, this.selectedFile)
         .then(response => {
           this.album.id = response.data.id;
           console.log("add album " + response.data);
