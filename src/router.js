@@ -3,6 +3,7 @@ import homePage from './components/Albums/AlbumsList.vue';
 import AlbumDetail from './components/Albums/ViewAlbum.vue';
 import AddAlbum from './components/Albums/AddAlbum.vue';
 import ViewAlbum from './components/Albums/ViewAlbum.vue';
+import EditAlbum from './components/Albums/EditAlbum.vue';
 
 
 const routes = [
@@ -13,6 +14,12 @@ const routes = [
         path: "/:id/:album",
         component: ViewAlbum,
         name: "viewAlbum",
+        props: true
+      },
+      {
+        path: "/edit/:id",
+        name: "editAlbum",
+        component: EditAlbum,
         props: true
       },
     // { path: '/playlist', component: Playlist, name: 'Playlist', meta: { transitionName: 'zoom' }, beforeEnter: beforeCheckPlaylist },

@@ -19,10 +19,9 @@
 
 
 <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-  <button type="button" @click="goEditTutorial()">Edit</button>
+  <button type="button" @click="goEditAlbum()">Edit</button>
   <button type="button" @click="goDeleteAlbum(album)" class="btn btn-danger">Delete</button>
-  <button type="button" @click="goAddLesson(id)" class="btn btn-success">Add Tracks</button>
-
+  <!-- <button type="button" @click="goAddLesson(id)" class="btn btn-success">Add Tracks</button> -->
 </div>
   
 
@@ -90,9 +89,9 @@ export default {
           this.message = e.response.data.message;
         });
     },
-    //  goEditTutorial() {
-    //   this.$router.push({ name: 'edit', params: { id: this.id } });
-    // },
+     goEditAlbum() {
+      this.$router.push({ name: 'editAlbum', params: { id: this.id } });
+    },
     // goEditLesson(lesson) {
     //   this.$router.push({ name: 'editLesson', params: { tutorialId: this.id,lessonId: lesson.id} });
     // },
