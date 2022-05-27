@@ -1,4 +1,5 @@
-# vue-3-crud
+# Album Info System Frontend
+
 
 ## Project setup
 ```
