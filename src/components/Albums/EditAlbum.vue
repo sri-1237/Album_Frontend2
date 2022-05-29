@@ -93,23 +93,28 @@ export default {
     return {
       album: {},
       message: "Enter data and click save",
-      previewImage: null
+      previewImage: null,
+      selectedFile: null,
     };
   },
   methods: {
       selectImage () {
-          this.$refs.fileInput.click()
+        this.$refs.fileInput.click();
+         
       },
       pickFile () {
         let input = this.$refs.fileInput
+       
         let file = input.files
+
+       this.selectedFile = file[0];
         if (file && file[0]) {
           let reader = new FileReader
           reader.onload = e => {
             this.previewImage = e.target.result
           }
           reader.readAsDataURL(file[0])
-          console.log("input....",this.previewImage);
+          // console.log("input....",this.previewImage);
           this.$emit('input', file[0])
         }
       },
@@ -150,10 +155,13 @@ export default {
         description: this.album.description
 
       };
-      AlbumDataService.update(this.id,data)
+      AlbumDataService.update(this.album.id,data, this.selectedFile)
         .then(response => {
           this.album.id = response.data.id;
-          console.log("add "+response.data);
+
+          // console.log("resp...",response.data.);
+       
+          // this.$router.push({ name: 'viewAlbum', params: { id: this.album.id, album: this.album.title } });   
           this.$router.push({ name: 'Home' });
         })
         .catch(e => {

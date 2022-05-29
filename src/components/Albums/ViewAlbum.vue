@@ -90,6 +90,7 @@ export default {
         });
     },
      goEditAlbum() {
+       console.log("id.....",this.id);
       this.$router.push({ name: 'editAlbum', params: { id: this.id } });
     },
     // goEditLesson(lesson) {
