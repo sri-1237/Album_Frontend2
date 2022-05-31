@@ -90,9 +90,22 @@ export default {
     searchTitle() {
       AlbumDataService.findByTitle(this.title)
         .then(response => {
-          this.albums = response.data;
-          console.log("results.", this.albums);
-          // this.setActiveTutorial(null);
+           var arr = new Array(response.data);
+
+          for (var i in arr[0]) {
+             
+            let resData = arr[0][i];
+            if(resData.data != null)
+          {
+            var blobObj = resData.data;
+            var bufferBase64 = new Buffer(blobObj.data, 'binary').toString('base64');
+            this.currentImage = "data:image/jpeg;base64," + bufferBase64;
+            arr[0][i]["imgURL"] = this.currentImage;
+          }
+            
+
+          }
+          this.albums = arr[0];
 
         })
         .catch(e => {
