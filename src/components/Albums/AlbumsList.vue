@@ -1,9 +1,9 @@
 <template>
 
-  <form class="d-flex">
+  <!-- <form class="d-flex">
     <input class="form-control me-2 searchBar" type="text" v-model="title" placeholder="Search by Album title">
     <button class="btn btn-primary" type="button" @click="searchTitle">Search</button>
-  </form>
+  </form> -->
 
   <div class="row">
     <div class="col-sm-10">
