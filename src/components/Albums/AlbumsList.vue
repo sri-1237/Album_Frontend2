@@ -16,9 +16,31 @@
 
   </div>
 
+  <div class="row row-cols-1 row-cols-md-5 g-4">
+    <h4 id="notFound" v-if="!albums.length">No Albums Found!!</h4>
+    <div class="col" v-for="(album, index) in albums" :key="index">
+      <div class="card h-100">
+        <!-- <router-link :to="{ name: 'viewAlbum', params: { id: album.id, album: album.title } }"> -->
+        <img :src="album.imgURL" class="card-img-top h-100" alt="...">
+        <!-- </router-link> -->
+        <div class="card-body album-details" @click="viewAlbum(album)">
+          <h5 class="card-title text-light">{{ album.title }}</h5>
+          <p class=" text-white-50">{{ album.artist }}</p>
+          <p class="text-white-50">1992{{ album.year }}</p>  
+          </div> 
+
+        <div class="ctrl-icons card-footer ">
+          <i class="addToFav fa-regular fa-star"></i>
+          <i class="editIcon fa-solid fa-pen-to-square"></i>
+          <i class="deleteIcon fa-solid fa-trash-can ml-3"></i>  
+        </div>
+      </div>
+    </div>
+  </div>
 
 
-  <div class="card card__big margin-top-xxl">
+
+  <!-- <div class="card card__big margin-top-xxl">
 
     <h4 id="notFound" v-if="!albums.length">No Albums Found!</h4>
 
@@ -29,13 +51,13 @@
         <router-link :to="{ name: 'viewAlbum', params: { id: album.id, album: album.title } }" :class="'album'">
 
           <img :src="album.imgURL" class="img-thumbnail album-image" id="img" alt="Album Image">
-          <!-- <a :href="album.data">{{ album.title }}</a> -->
-          <p id="albumTitle">{{ album.title }}</p>
-        </router-link>
+           <a :href="album.data">{{ album.title }}</a> -->
+  <!-- <p id="albumTitle">{{ album.title }}</p>
+        </router-link> -->
 
-      </li>
+  <!-- </li>
     </ul>
-  </div>
+  </div> -->
 </template>
 
 <script>
@@ -64,16 +86,15 @@ export default {
           var arr = new Array(response.data);
 
           for (var i in arr[0]) {
-             
+
             let resData = arr[0][i];
-            if(resData.data != null)
-          {
-            var blobObj = resData.data;
-            var bufferBase64 = new Buffer(blobObj.data, 'binary').toString('base64');
-            this.currentImage = "data:image/jpeg;base64," + bufferBase64;
-            arr[0][i]["imgURL"] = this.currentImage;
-          }
-            
+            if (resData.data != null) {
+              var blobObj = resData.data;
+              var bufferBase64 = new Buffer(blobObj.data, 'binary').toString('base64');
+              this.currentImage = "data:image/jpeg;base64," + bufferBase64;
+              arr[0][i]["imgURL"] = this.currentImage;
+            }
+
 
           }
           this.albums = arr[0];
@@ -86,6 +107,9 @@ export default {
     },
     addAlbum() {
       this.$router.push({ name: 'addAlbum' });
+    },
+    viewAlbum(album) {
+      this.$router.push({ name: 'viewAlbum', params: { id: album.id, album: album.title } });
     },
     searchTitle() {
       AlbumDataService.findByTitle(this.title)
@@ -111,14 +135,17 @@ export default {
 @image-size: 156px;
 @border-radius: 4px; */
 
-#img
-{
+#img {
   height: 190px;
 }
 
 .album-wrapper {
   margin: 12px;
   display: inline-block;
+}
+
+.album-details {
+  cursor: pointer;
 }
 
 .album {
@@ -167,9 +194,29 @@ export default {
   width: 60% !important;
 }
 
-#notFound{
-  color:white;
+#notFound {
+  color: white;
   margin-top: 30px;
+}
+
+.ctrl-icons
+{
+  /* margin-left: 50%; */
+  float: right;
+}
+
+.addToFav{
+  color:#e1aa45
+}
+
+.editIcon{
+  color:#7eb3dd;
+  margin-left: 10px;
+}
+
+.deleteIcon{
+  margin-left: 10px;
+  color:#bf3535
 }
 
 /* &:hover {

@@ -4,8 +4,8 @@ import router from './router'
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
+const app = createApp(App);
 
 
-createApp(App)
-  .use(router)
+app.use(router)
   .mount('#app')
