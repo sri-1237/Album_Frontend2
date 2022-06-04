@@ -1,10 +1,5 @@
 <template>
 
-  <form class="d-flex">
-    <input class="form-control me-2 searchBar" type="text" v-model="title" placeholder="Search by Album title">
-    <button class="btn btn-primary" type="button" @click="searchTitle">Search</button>
-  </form>
-
   <div class="row">
     <div class="col-sm-10">
       <h1>Albums</h1>
@@ -13,10 +8,7 @@
       <button type="button" class="btn btn-success" @click="addAlbum()"><i class="fa fa-plus" aria-hidden="true"></i>
         Add Album</button>
     </div>
-
   </div>
-
-
 
   <div class="card card__big margin-top-xxl">
 
@@ -25,11 +17,9 @@
     <ul class="album-list flex-list">
       <li class="album-wrapper" :class="{ active: index == currentIndex }" v-for="(album, index) in albums" :key="index"
         @click="setActiveTutorial(album, index)">
-        
-        <router-link :to="{ name: 'viewAlbum', params: { id: album.id, album: album.title } }" :class="'album'">
 
+        <router-link :to="{ name: 'viewAlbum', params: { id: album.id, album: album.title } }" :class="'album'">
           <img :src="album.imgURL" class="img-thumbnail album-image" id="img" alt="Album Image">
-          <!-- <a :href="album.data">{{ album.title }}</a> -->
           <p id="albumTitle">{{ album.title }}</p>
         </router-link>
 
@@ -64,16 +54,15 @@ export default {
           var arr = new Array(response.data);
 
           for (var i in arr[0]) {
-             
+
             let resData = arr[0][i];
-            if(resData.data != null)
-          {
-            var blobObj = resData.data;
-            var bufferBase64 = new Buffer(blobObj.data, 'binary').toString('base64');
-            this.currentImage = "data:image/jpeg;base64," + bufferBase64;
-            arr[0][i]["imgURL"] = this.currentImage;
-          }
-            
+            if (resData.data != null) {
+              var blobObj = resData.data;
+              var bufferBase64 = new Buffer(blobObj.data, 'binary').toString('base64');
+              this.currentImage = "data:image/jpeg;base64," + bufferBase64;
+              arr[0][i]["imgURL"] = this.currentImage;
+            }
+
 
           }
           this.albums = arr[0];
@@ -111,8 +100,7 @@ export default {
 @image-size: 156px;
 @border-radius: 4px; */
 
-#img
-{
+#img {
   height: 190px;
 }
 
@@ -167,8 +155,8 @@ export default {
   width: 60% !important;
 }
 
-#notFound{
-  color:white;
+#notFound {
+  color: white;
   margin-top: 30px;
 }
 
