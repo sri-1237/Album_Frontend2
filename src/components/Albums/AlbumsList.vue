@@ -10,22 +10,34 @@
     </div>
   </div>
 
-  <div class="card card__big margin-top-xxl">
+  <div class="row row-cols-1 row-cols-md-6 g-4">
 
-    <h4 id="notFound" v-if="!albums.length">No Albums Found!</h4>
+<h4 id="notFound" v-if="!albums.length">No Albums Found!!</h4>
+    <div class="col" v-for="(album, index) in albums" :key="index">
+      <div class="card h-100">
+        <div class="card-header h-100">{{ album.title }}
 
-    <ul class="album-list flex-list">
-      <li class="album-wrapper" :class="{ active: index == currentIndex }" v-for="(album, index) in albums" :key="index"
-        @click="setActiveTutorial(album, index)">
+          <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">Dropdown</a>
+          <div class="dropdown-menu">
+            <a href="#" class="dropdown-item">Action</a>
+            <a href="#" class="dropdown-item">Another action</a>
 
-        <router-link :to="{ name: 'viewAlbum', params: { id: album.id, album: album.title } }" :class="'album'">
-          <img :src="album.imgURL" class="img-thumbnail album-image" id="img" alt="Album Image">
-          <p id="albumTitle">{{ album.title }}</p>
-        </router-link>
+          </div>
+        </div>
 
-      </li>
-    </ul>
+
+        <div class="card-body">
+          <img :src="album.imgURL"  class="card-img-top cardImg rounded-circle" alt="...">
+          <h5 class="card-title">Card title</h5>
+          <p class="card-text">Some dummy text to make up the card's content. You can replace it anytime.</p>
+        </div>
+
+      </div>
+    </div>
+
   </div>
+
+
 </template>
 
 <script>
@@ -158,6 +170,11 @@ export default {
 #notFound {
   color: white;
   margin-top: 30px;
+}
+
+.cardImg{
+  width:100%;
+  height:150px;
 }
 
 /* &:hover {
