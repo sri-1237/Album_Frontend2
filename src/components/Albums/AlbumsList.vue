@@ -15,21 +15,23 @@
 <h4 id="notFound" v-if="!albums.length">No Albums Found!!</h4>
     <div class="col" v-for="(album, index) in albums" :key="index">
       <div class="card h-100">
-        <div class="card-header h-100">{{ album.title }}
+        <div class="card-header h-100">
+         
+          <h5 class="albumTitle">{{ album.title }}</h5>         
 
-          <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">Dropdown</a>
+          <a href="#" data-bs-toggle="dropdown"> <i class="fa-solid fa-angle-down"></i></a>
           <div class="dropdown-menu">
-            <a href="#" class="dropdown-item">Action</a>
-            <a href="#" class="dropdown-item">Another action</a>
+             <i class="editIcon dropdown-item fa-solid fa-pen-to-square"  @click="goEditAlbum(album)">  Edit</i>
+             <i class="deleteIcon dropdown-item fa-solid fa-trash-can ml-3"  @click="goDeleteAlbum(album)">  Delete</i>         
 
           </div>
         </div>
 
 
-        <div class="card-body">
+        <div class="card-body" @click="viewAlbum(album)">
           <img :src="album.imgURL"  class="card-img-top cardImg rounded-circle" alt="...">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">Some dummy text to make up the card's content. You can replace it anytime.</p>
+          <h6 class="card-title">{{ album.artist }}</h6>
+          <p class="card-text">{{album.releasedYear}}</p>
         </div>
 
       </div>
@@ -87,6 +89,24 @@ export default {
     },
     addAlbum() {
       this.$router.push({ name: 'addAlbum' });
+    },
+     viewAlbum(album) {
+      this.$router.push({ name: 'viewAlbum', params: { id: album.id, album: album.title } });
+    },
+     goEditAlbum(album) {
+       console.log("id.....",album.id);
+      this.$router.push({ name: 'editAlbum', params: { id: album.id } });
+    },
+
+     goDeleteAlbum(album) {
+      AlbumDataService.delete(album.id)
+        .then(() => {
+           this.retrieveAlbums();
+          // this.$router.push({ name: 'Home' });
+        })
+        .catch(e => {
+          this.message = e.response.data.message;
+        });
     },
     searchTitle() {
       AlbumDataService.findByTitle(this.title)
@@ -174,7 +194,29 @@ export default {
 
 .cardImg{
   width:100%;
-  height:150px;
+  height:170px;
+}
+
+.card-header{
+  display: inline-flex;
+}
+
+.albumTitle{
+  color: #ffffffe0;
+  width:90%;
+  margin-right: 2px;
+}
+
+.card-body, .editIcon, .deleteIcon{
+  cursor: pointer;
+}
+
+.card-title{
+  color:#ffffffe0
+}
+
+.card-text{
+  color:#ffffffe0
 }
 
 /* &:hover {

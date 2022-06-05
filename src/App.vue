@@ -13,7 +13,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-lg-5 ms-5 ">
-          <li class="nav-item me-3">
+          <li class="nav-item me-3" @click="returnHome()">
             <a class="nav-link active" aria-current="page" href="#">Albums</a>
           </li>
 
@@ -74,6 +74,9 @@ export default {
         .catch(e => {
           this.message = e.response.data.message;
         });
+    },
+    returnHome(){
+      this.$router.push({ name: 'Home' });
     }
   }
 };
@@ -87,6 +90,7 @@ export default {
   /* text-align: center; */
   color: #2c3e50;
   /* margin-top: 60px; */
+  height:1500px;
   background-image: linear-gradient(to bottom right, #ff7e3d, #dc3545);
 }
 
