@@ -14,7 +14,8 @@
                                 <small class="ml-2" id="trackTitle"> {{ track.title }} </small>
                                 
                             </div>
-                            <i class="fa fa-check color"></i>
+                            <i class="fa-solid fa-play" v-if="!isPlaying" @click="play(track)"></i>
+                            <i class="fa-solid fa-pause" v-else @click="pause"></i>
                         </div>                  
                                     
                        </div>  
@@ -31,10 +32,27 @@ export default {
   },
   data() {
     return {
+        index: 0,
+      isPlaying: false,
+       player: new Audio()
       
     };
   },
   methods: {
+      play (song) {
+          console.log("song...",song);
+    //   if (typeof song.src != "undefined") {
+    //     this.current = song;
+        this.player.src = song.description;
+        
+    //   }
+      this.player.play();
+      this.isPlaying = true;
+    },
+    pause () {
+      this.player.pause();
+      this.isPlaying = false;
+    },
 
     // deleteLesson() {
     //   this.$emit("deleteLesson");
