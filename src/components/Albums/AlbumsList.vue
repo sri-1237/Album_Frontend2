@@ -10,22 +10,36 @@
     </div>
   </div>
 
-  <div class="card card__big margin-top-xxl">
+  <div class="row row-cols-1 row-cols-md-6 g-4">
 
-    <h4 id="notFound" v-if="!albums.length">No Albums Found!</h4>
+<h4 id="notFound" v-if="!albums.length">No Albums Found!!</h4>
+    <div class="col" v-for="(album, index) in albums" :key="index">
+      <div class="card h-100">
+        <div class="card-header h-100">
+         
+          <h5 class="albumTitle">{{ album.title }}</h5>         
 
-    <ul class="album-list flex-list">
-      <li class="album-wrapper" :class="{ active: index == currentIndex }" v-for="(album, index) in albums" :key="index"
-        @click="setActiveTutorial(album, index)">
+          <a href="#" data-bs-toggle="dropdown"> <i class="fa-solid fa-angle-down"></i></a>
+          <div class="dropdown-menu">
+             <i class="editIcon dropdown-item fa-solid fa-pen-to-square"  @click="goEditAlbum(album)">  Edit</i>
+             <i class="deleteIcon dropdown-item fa-solid fa-trash-can ml-3"  @click="goDeleteAlbum(album)">  Delete</i>         
 
-        <router-link :to="{ name: 'viewAlbum', params: { id: album.id, album: album.title } }" :class="'album'">
-          <img :src="album.imgURL" class="img-thumbnail album-image" id="img" alt="Album Image">
-          <p id="albumTitle">{{ album.title }}</p>
-        </router-link>
+          </div>
+        </div>
 
-      </li>
-    </ul>
+
+        <div class="card-body" @click="viewAlbum(album)">
+          <img :src="album.imgURL"  class="card-img-top cardImg rounded-circle" alt="...">
+          <h6 class="card-title">{{ album.artist }}</h6>
+          <p class="card-text">{{album.releasedYear}}</p>
+        </div>
+
+      </div>
+    </div>
+
   </div>
+
+
 </template>
 
 <script>
@@ -75,6 +89,24 @@ export default {
     },
     addAlbum() {
       this.$router.push({ name: 'addAlbum' });
+    },
+     viewAlbum(album) {
+      this.$router.push({ name: 'viewAlbum', params: { id: album.id, album: album.title } });
+    },
+     goEditAlbum(album) {
+       console.log("id.....",album.id);
+      this.$router.push({ name: 'editAlbum', params: { id: album.id } });
+    },
+
+     goDeleteAlbum(album) {
+      AlbumDataService.delete(album.id)
+        .then(() => {
+           this.retrieveAlbums();
+          // this.$router.push({ name: 'Home' });
+        })
+        .catch(e => {
+          this.message = e.response.data.message;
+        });
     },
     searchTitle() {
       AlbumDataService.findByTitle(this.title)
@@ -158,6 +190,33 @@ export default {
 #notFound {
   color: white;
   margin-top: 30px;
+}
+
+.cardImg{
+  width:100%;
+  height:170px;
+}
+
+.card-header{
+  display: inline-flex;
+}
+
+.albumTitle{
+  color: #ffffffe0;
+  width:90%;
+  margin-right: 2px;
+}
+
+.card-body, .editIcon, .deleteIcon{
+  cursor: pointer;
+}
+
+.card-title{
+  color:#ffffffe0
+}
+
+.card-text{
+  color:#ffffffe0
 }
 
 /* &:hover {

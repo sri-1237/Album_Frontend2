@@ -122,7 +122,8 @@ export default {
           console.log("inputs..", this.inputs);
           for(var i in this.inputs) {
             var trackdata = {
-              title: this.inputs[i].name
+              title:"Song1",
+              description: this.inputs[i].name
             };
              TracksDataService.createTrack(this.album.id, trackdata)
             .then(response => {
