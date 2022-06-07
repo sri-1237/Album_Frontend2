@@ -61,10 +61,10 @@ export default {
         this.searchAlbum();
       }
       else if (this.searchCategory == 'artist') {
-        this.searchArtist();
+        // this.searchArtist();
       }
       else if (this.searchCategory == 'track') {
-        this.searchTrack();
+        // this.searchTrack();
       }
     }
   },
