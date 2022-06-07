@@ -4,6 +4,8 @@ import AlbumDetail from './components/Albums/ViewAlbum.vue';
 import AddAlbum from './components/Albums/AddAlbum.vue';
 import ViewAlbum from './components/Albums/ViewAlbum.vue';
 import EditAlbum from './components/Albums/EditAlbum.vue';
+import Search from './components/SearchResults.vue';
+
 
 
 const routes = [
@@ -22,6 +24,18 @@ const routes = [
         component: EditAlbum,
         props: true
       },
+      {
+        path: "/:type/:query",
+        component: Search,
+        name: "search",
+        props: true
+      },
+      {
+        path: '/:type/search',
+        component: Search,
+        name:"ss",
+        props: route => ({ query: route.query.q})
+      }
     // { path: '/playlist', component: Playlist, name: 'Playlist', meta: { transitionName: 'zoom' }, beforeEnter: beforeCheckPlaylist },
     // { path: '/artist/:name', component: ArtistDetail, name: 'Artist', meta: { transitionName: 'slide' } },
     // { path: '/artist/:name/:album', component: AlbumDetail, name: 'Album', meta: { transitionName: 'slide' } }

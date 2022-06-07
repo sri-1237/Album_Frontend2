@@ -40,7 +40,7 @@ export default {
   },
   methods: {
       play (song) {
-          console.log("song...",song);
+        //   console.log("song...",song);
     //   if (typeof song.src != "undefined") {
     //     this.current = song;
         this.player.src = song.description;

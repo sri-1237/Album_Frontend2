@@ -102,7 +102,7 @@ export default {
 
       this.currentImage = this.$refs.file.files.item(0);
 
-      console.log("Imggg...",this.selectedFile);
+      // console.log("Imggg...",this.selectedFile);
 
       // this.previewImage = URL.createObjectURL(this.currentImage);
 
@@ -114,12 +114,12 @@ export default {
         description: this.album.description
       };
 
-      console.log("Data..", data);
+      // console.log("Data..", data);
       AlbumDataService.createAlbum(data, this.selectedFile)
         .then(response => {
           this.album.id = response.data.id;
-          console.log("add album " + response.data);
-          console.log("inputs..", this.inputs);
+          // console.log("add album " + response.data);
+          // console.log("inputs..", this.inputs);
           for(var i in this.inputs) {
             var trackdata = {
               title:"Song1",
@@ -128,7 +128,7 @@ export default {
              TracksDataService.createTrack(this.album.id, trackdata)
             .then(response => {
               this.tracks = response.data
-              console.log("Tracks...", this.tracks);
+              // console.log("Tracks...", this.tracks);
               
             })
             .catch(e => {
