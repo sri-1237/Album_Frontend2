@@ -35,9 +35,13 @@
         </ul>
         <!--Search Input -->
         <div class="search-container">
-          <input class="form-control me-2 searchInput" type="search" v-model="title"
+          <input class="form-control me-2 searchInput" type="search" v-model="searchText" 
             placeholder="Search by Album title">
-          <button class="btn btn-primary" type="button" @click="searchTitle">Search</button>
+           <select v-model="selected" class="selector" :initial="startingType" >
+      <option v-for="element in elements" :key="element.value" :value="element.value">{{ element.name }}</option>
+    </select>
+          <button class="btn btn-primary" type="button" @click="searchRes">Search</button>
+          
         </div>
       </div>
     </div>
@@ -54,15 +58,41 @@
 import logo from './assets/OC-Logo.png'
 import AlbumDataService from "./services/AlbumDataService";
 
+
 export default {
   name: "app",
+   components: {  },
   data: () => ({
     logo,
-    title: "",
+    searchText: "",
     albums: [],
+     search: '',
+      selected: 'album',
+    elements: [
+      { name: 'Albums', value: 'album' },
+        { name: 'Tracks', value: 'track' },        
+        { name: 'Artists', value: 'artist' }
+      ]
   }),
+   computed: {
+    isActive () {
+      return this.search !== undefined && this.search !== null && this.search !== '';
+    },
+    startingType () {
+      return this.elements[0].value;
+    }
+  },
 
   methods: {
+      setSearch: function (search) {
+        
+      this.search = search;
+    },
+    changeType: function (type) {
+      
+      this.type = type;
+      console.log("changed",this.type)
+    },
     searchTitle() {
       AlbumDataService.findByTitle(this.title)
         .then(response => {
@@ -74,6 +104,18 @@ export default {
         .catch(e => {
           this.message = e.response.data.message;
         });
+    },
+
+    searchRes()
+    {
+       console.log("ssss",this.selected);
+       var params = {
+         text : this.searchText,
+         type : this.selected
+       }
+       this.$emit('searchClicked', params);
+      this.$router.push({ name: 'ss', params: { type: this.selected } , query: { q: this.searchText } })
+
     },
     returnHome(){
       this.$router.push({ name: 'Home' });
@@ -107,4 +149,11 @@ export default {
   width: 60% !important;
   display: inline !important;
 }
+
+
+  .type-wrapper {
+    display: inline-block;
+    margin: 0 5px;
+  }
+
 </style>

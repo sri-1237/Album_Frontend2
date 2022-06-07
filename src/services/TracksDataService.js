@@ -1,7 +1,7 @@
 import http from "../http-common";
 class TracksDataService {
   getAllTracks(albumId) {
-    console.log("album id...",albumId);
+    // console.log("album id...",albumId);
     return http.get(`/albums/${albumId}/tracks`);
   }
   getTrack(albumId,id) {

@@ -94,7 +94,7 @@ export default {
       this.$router.push({ name: 'viewAlbum', params: { id: album.id, album: album.title } });
     },
      goEditAlbum(album) {
-       console.log("id.....",album.id);
+      //  console.log("id.....",album.id);
       this.$router.push({ name: 'editAlbum', params: { id: album.id } });
     },
 
@@ -112,7 +112,7 @@ export default {
       AlbumDataService.findByTitle(this.title)
         .then(response => {
           this.albums = response.data;
-          console.log("results.", this.albums);
+          // console.log("results.", this.albums);
           // this.setActiveTutorial(null);
 
         })

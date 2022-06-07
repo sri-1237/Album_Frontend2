@@ -79,7 +79,7 @@ export default {
           TracksDataService.getAllTracks(this.id)
             .then(response => {
               this.tracks = response.data
-              console.log("Tracks...", this.tracks);
+              // console.log("Tracks...", this.tracks);
             })
             .catch(e => {
               this.message = e.response.data.message;
@@ -90,7 +90,7 @@ export default {
         });
     },
      goEditAlbum() {
-       console.log("id.....",this.id);
+      //  console.log("id.....",this.id);
       this.$router.push({ name: 'editAlbum', params: { id: this.id } });
     },
     // goEditLesson(lesson) {
