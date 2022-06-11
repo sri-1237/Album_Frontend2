@@ -118,7 +118,7 @@ export default {
         type: this.selected
       }
       this.$emit('searchClicked', params);
-      this.$router.push({ name: 'ss', params: { type: this.selected }, query: { q: this.searchText } })
+      this.$router.push({ name: 'search', params: { type: this.selected }, query: { q: this.searchText } })
 
     },
     tracksPage(){

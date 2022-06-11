@@ -24,15 +24,9 @@ const routes = [
         props: true
       },
       {
-        path: "/:type/:query",
-        component: Search,
-        name: "search",
-        props: true
-      },
-      {
         path: '/:type/search',
         component: Search,
-        name:"ss",
+        name:"search",
         props: route => ({ query: route.query.q})
       },
       { path: '/tracks', component: Tracks, name: 'tracks', meta: { transitionName: 'slide' } },
