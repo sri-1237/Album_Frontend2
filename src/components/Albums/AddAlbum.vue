@@ -22,11 +22,16 @@
 
   <div class="row">
     <div class="col-sm-2">
-      <label for="albumArtist"> Artist</label>
+      <label for="albumArtist"> Select Artist</label>
     </div>
     <div class="col-sm-8">
-      <input type="text" class="form-control" v-model="album.artist" id="album-artist" placeholder="Enter Artist Name"
-        name="title">
+      <!-- <input type="text" class="form-control" v-model="album.artist" id="album-artist" placeholder="Enter Artist Name"
+        name="title"> -->
+         <select v-on:change="onChange($event)" class="form-select" aria-label="Default select example">
+                  <option selected></option>
+                  <option :value="artist.id" v-for="artist in artists" :key="artist.id" :artist="artist">{{ artist.name }}
+                  </option>
+                </select>
     </div>
   </div>
 
@@ -65,6 +70,7 @@
 <script>
 import AlbumDataService from "../../services/AlbumDataService";
 import TracksDataService from "../../services/TracksDataService";
+import ArtistDataService from "../../services/ArtistDataService";
 
 export default {
   name: "add-album",
@@ -75,7 +81,8 @@ export default {
         title: "",
         coverImg: "",
         description: "",
-        published: false
+        published: false,
+        artistId: ""
       },
       inputs: [
         {
@@ -89,14 +96,30 @@ export default {
       selectedFile: null,
       currentFile: undefined,
       progress: 0, 
-      fileInfos: []
+      fileInfos: [],
+      artists:[]
     };
   },
   methods: {
+     onChange(e) {
+      console.log("eeeeeee", e.target.value);
+      console.log("trackkkkk11", this.$props.track)
+      this.album.artistId  = e.target.value;
+    },
     selectFile(event) {
       this.selectedFile = event.target.files[0];
       
       console.log("test image...", this.selectedFile);
+    },
+    getAllArtists() {
+      console.log("artisttt", this.$props)
+      ArtistDataService.getAll()
+        .then(response => {
+          this.artists = response.data;
+        })
+        .catch(e => {
+          this.message = e.response.data.message;
+        });
     },
     saveAlbum() {
       // this.currentFile = this.selectedFiles.item(0);
@@ -107,12 +130,13 @@ export default {
 
       // this.previewImage = URL.createObjectURL(this.currentImage);
 
-      // console.log("Imggg 2222...",this.previewImage);
+      console.log("Imggg 2222...",this.album.artistId);
 
       var data = {
         title: this.album.title,
-        artist: this.album.artist,
-        description: this.album.description
+        artistId: this.album.artistId,
+        description: this.album.description,
+        
       };
 
       // console.log("Data..", data);
@@ -153,6 +177,9 @@ export default {
     remove(index) {
       this.inputs.splice(index, 1);
     }
+  },
+   mounted() {
+    this.getAllArtists();
   }
 }
 

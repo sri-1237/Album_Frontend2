@@ -1,19 +1,25 @@
 <template>
 
-  <div class="row">
-    <div class="col-sm-10">
-      <h1>Albums</h1>
-    </div>
-    <div class="col-sm-2">
-      <button type="button" class="btn btn-success" @click="addAlbum()"><i class="fa fa-plus" aria-hidden="true"></i>
-        Add Album</button>
-    </div>
-  </div>
+<div class="container">
 
-  <div class="row row-cols-1 row-cols-md-6 g-4">
+   <div class="row">
+
+      <h2 class="text-center contentHeader">
+        <button type="button" class="btn btn-success addBtn" @click="addAlbum()"><i class="fa fa-plus"
+            aria-hidden="true"></i>
+          Add Album</button> <strong style="
+    margin-left: -180px;">Albums</strong>
+      </h2>
+      <hr>
+    </div>
+
+    
+
+
+  <div class="row row-cols-1 row-cols-md-5 g-4">
 
 <h4 id="notFound" v-if="!albums.length">No Albums Found!!</h4>
-    <div class="col" v-for="(album, index) in albums" :key="index">
+    <!-- <div class="col" v-for="(album, index) in albums" :key="index">
       <div class="card h-100">
         <div class="card-header h-100">
          
@@ -35,19 +41,30 @@
         </div>
 
       </div>
-    </div>
+    </div> -->
 
-  </div>
+    <!-- <div class="row row-cols-2 row-cols-lg-6"> -->
+     <!-- <h1>Albums Results</h1> -->
+    
+      <Album v-for="album in albums" :key="album.id" :album="album"  @viewAlbum="viewAlbum(album)" @deleteAlbum="goDeleteAlbum(album)"
+        @editAlbum="goEditAlbum(album)" />
+      
+    </div>
+    </div>
+<!-- 
+  </div> -->
 
 
 </template>
 
 <script>
 import AlbumDataService from "../../services/AlbumDataService";
+import Album from './Album.vue';
 import { Buffer } from 'buffer';
 
 export default {
   name: "albums-list",
+  components: { Album},
   data() {
     return {
       albums: [],

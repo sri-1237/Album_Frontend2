@@ -6,10 +6,14 @@
       <!-- <Artist v-for="artist in artists" :key="artist.mbid" :artist="artist" /> -->
     </ul>
 
-    <ul v-if="searchCategory == 'album'" class="album-list flex-list mt-5">
-      <h1>Albums Results</h1>
-      <Album v-for="album in albums" :key="album.id" :album="album" />
-    </ul>
+    <div v-if="searchCategory == 'album'" class="row row-cols-2 row-cols-lg-6">
+     <!-- <h1>Albums Results</h1> -->
+    
+      <Album v-for="album in albums" :key="album.id" :album="album"  @viewAlbum="viewAlbum(album)" @deleteAlbum="deleteAlbum(album)"
+        @editAlbum="editAlbum(album)" />
+      
+    </div>
+
 
     <ul v-if="searchCategory == 'track'" class="track-list flex-list mt-5">
       <h1>Tracks Results</h1>
@@ -34,6 +38,9 @@ import AlbumDataService from "../services/AlbumDataService";
 import TracksDataService from "../services/TracksDataService";
 import TracksDisplay from './Tracks/TracksDisplay.vue';
 import Album from './Albums/Album.vue';
+
+import { Buffer } from 'buffer';
+
 
 export default {
   name: "Search-results",
@@ -67,7 +74,22 @@ export default {
       console.log("textttt",this.searchText);
       AlbumDataService.findByTitle(this.searchText)
         .then(response => {
-          this.albums = response.data;
+           var arr = new Array(response.data);
+
+          for (var i in arr[0]) {
+
+            let resData = arr[0][i];
+            if (resData.data != null) {
+              var blobObj = resData.data;
+              var bufferBase64 = new Buffer(blobObj.data, 'binary').toString('base64');
+              this.currentImage = "data:image/jpeg;base64," + bufferBase64;
+              arr[0][i]["imgURL"] = this.currentImage;
+            }
+
+
+          }
+          this.albums = arr[0];
+          // this.albums = response.data;
           console.log("results.", this.albums);
           // this.setActiveTutorial(null);
 
@@ -89,7 +111,8 @@ export default {
           this.message = e.response.data.message;
         });
     },
-    retrieveAlbums() {
+    searchNow() {
+
       if (this.searchCategory == 'album') {
         this.searchAlbum();
       }
@@ -99,11 +122,29 @@ export default {
       else if (this.searchCategory == 'track') {
         this.searchTrack();
       }
-    }
+    },
+    viewAlbum(album){
+      this.$router.push({ name: 'viewAlbum', params: { id: album.id, album: album.title } });
+    },
+    editAlbum(album) {
+      //  console.log("id.....",album.id);
+      this.$router.push({ name: 'editAlbum', params: { id: album.id } });
+    },
+
+     deleteAlbum(album) {
+      AlbumDataService.delete(album.id)
+        .then(() => {
+           this.searchNow();
+          // this.$router.push({ name: 'Home' });
+        })
+        .catch(e => {
+          this.message = e.response.data.message;
+        });
+    },
   },
 
   mounted() {
-    this.retrieveAlbums();
+    this.searchNow();
   }
 }
 </script>

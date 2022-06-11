@@ -89,7 +89,7 @@ export default {
       
       console.log("test image...", this.selectedFile);
     },
-    saveAlbum() {
+    saveArtist() {
       // this.currentFile = this.selectedFiles.item(0);
 
       this.currentImage = this.$refs.file.files.item(0);
@@ -119,7 +119,7 @@ export default {
         });
     },
     cancel() {
-      this.$router.push({ name: 'Home' });
+      this.$router.push({ name: 'artists' });
     }
  
   }

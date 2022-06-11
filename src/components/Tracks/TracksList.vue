@@ -1,10 +1,16 @@
 <template>
-  <h1 class="mt-15">List of Tracks</h1>
-  <div class="col-sm-2">
-    <button type="button" @click="toggleModal" class="btn btn-success"><i class="fa fa-plus" aria-hidden="true"></i>Add
-      Tracks</button>
+
+  <div class="row">
+
+    <h2 class="text-center contentHeader">
+      <button type="button" class="btn btn-success addBtn" @click="toggleModal"><i class="fa fa-plus"
+          aria-hidden="true"></i>
+        Add Tracks</button> <strong style="
+    margin-left: -180px;">Tracks</strong>
+    </h2>
+    <hr>
   </div>
-  <AddTrack :showModal="showModalNow" @closeModal="closeMyModal" :trackData ="singleTrackData"> </AddTrack>
+  <AddTrack :showModal="showModalNow" @closeModal="closeMyModal" :trackData="singleTrackData"> </AddTrack>
   <TracksDisplay v-for="track in tracks" :key="track.id" :track="track" @getTracks="getAllTracks"
     @editTracks="editThisTracks" />
 </template>
@@ -25,7 +31,7 @@ export default {
     return {
       showModalNow: false,
       album: {},
-      singleTrackData:{},
+      singleTrackData: {},
       tracks: [],
       message: ""
     };
