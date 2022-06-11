@@ -14,10 +14,6 @@
       
     </div>
 
-    <!-- <ul v-if="searchCategory == 'album'" class="album-list flex-list mt-5">
-      <h1>Albums Results</h1>
-      <Album v-for="album in albums" :key="album.id" :album="album" />
-    </ul> -->
 
     <ul v-if="searchCategory == 'track'" class="track-list flex-list mt-5">
       <h1>Tracks Results</h1>
@@ -42,7 +38,9 @@ import AlbumDataService from "../services/AlbumDataService";
 import TracksDataService from "../services/TracksDataService";
 import TracksDisplay from './Tracks/TracksDisplay.vue';
 import Album from './Albums/Album.vue';
+
 import { Buffer } from 'buffer';
+
 
 export default {
   name: "Search-results",
@@ -114,6 +112,7 @@ export default {
         });
     },
     searchNow() {
+
       if (this.searchCategory == 'album') {
         this.searchAlbum();
       }
