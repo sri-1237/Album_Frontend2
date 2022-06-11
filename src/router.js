@@ -46,16 +46,10 @@ const routes = [
         props: true
       },
       
-
-        path: "/:type/:query",
-        component: Search,
-        name: "search",
-        props: true
-      },
       {
         path: '/:type/search',
         component: Search,
-        name:"ss",
+        name:"search",
         props: route => ({ query: route.query.q})
       },
       { path: '/tracks', component: Tracks, name: 'tracks', meta: { transitionName: 'slide' } },
@@ -63,7 +57,7 @@ const routes = [
     // { path: '/playlist', component: Playlist, name: 'Playlist', meta: { transitionName: 'zoom' }, beforeEnter: beforeCheckPlaylist },
     // { path: '/artist/:name', component: ArtistDetail, name: 'Artist', meta: { transitionName: 'slide' } },
     // { path: '/artist/:name/:album', component: AlbumDetail, name: 'Album', meta: { transitionName: 'slide' } }
-    { path: '/artist', component: homePage1, name: 'Home1', meta: { transitionName: 'slide' } },
+    { path: '/artist', component: homePage1, name: 'artists', meta: { transitionName: 'slide' } },
 
   ];
 

@@ -17,38 +17,23 @@
             <p class="nav-link active" aria-current="page">Albums</p>
           </li>
 
-          <li class="nav-item dropdown me-3">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
-              aria-expanded="false">
-              Albums
-            </a>
-              
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              
-              <li>
-                  <router-link to="/artist" >
-                <a class="dropdown-item" href="#">Artists</a>
-                </router-link>
-              </li>  
-               <li>
-                <hr class="dropdown-divider">
-              </li>
-              <li><a class="dropdown-item" href="#">Tracks</a></li>
-             
-            </ul>
+          <li class="nav-item me-3 " @click="artistPage()">
+            <p class="nav-link active" aria-current="page">Artists</p>
           </li>
+
+
           <li class="nav-item me-3" @click="tracksPage()">
             <a class="nav-link" aria-current="page" href="#">Tracks</a>
           </li>
 
         </ul>
 
-        
+
         <!--Search Input -->
         <div class="search-container">
           <input class="form-control me-2 searchInput" type="search" v-model="searchText"
             placeholder="Search by Album title">
-          <select v-model="selected" class="form-select searchcategory"  :initial="startingType">
+          <select v-model="selected" class="form-select searchcategory" :initial="startingType">
             <option v-for="element in elements" :key="element.value" :value="element.value">{{ element.name }}</option>
           </select>
           <button class="btn btn-primary" type="button" @click="searchRes">Search</button>
@@ -124,11 +109,14 @@ export default {
         type: this.selected
       }
       this.$emit('searchClicked', params);
-      this.$router.push({ name: 'ss', params: { type: this.selected }, query: { q: this.searchText } })
+      this.$router.push({ name: 'search', params: { type: this.selected }, query: { q: this.searchText } })
 
     },
-    tracksPage(){
-this.$router.push({ name: 'tracks' });
+    artistPage() {
+      this.$router.push({ name: 'artists' });
+    },
+    tracksPage() {
+      this.$router.push({ name: 'tracks' });
     },
     returnHome() {
       this.$router.push({ name: 'Home' });
@@ -163,12 +151,12 @@ this.$router.push({ name: 'tracks' });
   display: inline !important;
 }
 
-.searchcategory{
-  display:inline !important;
+.searchcategory {
+  display: inline !important;
   width: auto !important;
 }
 
-.nav-item{
+.nav-item {
   cursor: pointer;
 }
 

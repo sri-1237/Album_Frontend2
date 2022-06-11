@@ -118,6 +118,7 @@ export default {
         }
       },
     retrieveArtist() {
+      console.log("a id...",this.id);
       ArtistDataService.get(this.id)
         .then(response => {
           // this.album = response.data;
@@ -131,6 +132,7 @@ export default {
             arr[0]["imgURL"] = imgBase64;
           }
           this.artist = arr[0];
+          console.log("a idaaaa...", this.artist);
           this.previewImage=this.artist.imgURL;
 
         //   TracksDataService.getAllTracks(this.id)

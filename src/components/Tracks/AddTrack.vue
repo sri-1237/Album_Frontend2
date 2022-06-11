@@ -58,6 +58,16 @@ export default {
     albumId: Number,
     trackData: Object
   },
+  data() {
+    return {
+      active: this.showModal,
+      id:"",
+      title: "",
+      url: "",
+      albumid: "",
+      albums: [],
+    };
+  },
   watch: {
     showModal: {
       handler(newVal) {
@@ -90,16 +100,7 @@ export default {
 
     }
   },
-  data() {
-    return {
-      active: this.showModal,
-      id:"",
-      title: "",
-      url: "",
-      albumid: "",
-      albums: [],
-    };
-  },
+  
   methods: {
     close_modal() {
 
