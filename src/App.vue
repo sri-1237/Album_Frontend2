@@ -13,11 +13,11 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-lg-5 ms-5 ">
-          <li class="nav-item me-3" @click="returnHome()">
-            <a class="nav-link active" aria-current="page" href="#">Albums</a>
+          <li class="nav-item me-3 " @click="returnHome()">
+            <p class="nav-link active" aria-current="page">Albums</p>
           </li>
 
-          <li class="nav-item dropdown">
+          <li class="nav-item dropdown me-3">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
               aria-expanded="false">
               Artists
@@ -31,17 +31,22 @@
               <li><a class="dropdown-item" href="#">Something else here</a></li>
             </ul>
           </li>
+          <li class="nav-item me-3" @click="tracksPage()">
+            <a class="nav-link" aria-current="page" href="#">Tracks</a>
+          </li>
 
         </ul>
+
+        
         <!--Search Input -->
         <div class="search-container">
-          <input class="form-control me-2 searchInput" type="search" v-model="searchText" 
+          <input class="form-control me-2 searchInput" type="search" v-model="searchText"
             placeholder="Search by Album title">
-           <select v-model="selected" class="selector" :initial="startingType" >
-      <option v-for="element in elements" :key="element.value" :value="element.value">{{ element.name }}</option>
-    </select>
+          <select v-model="selected" class="form-select searchcategory"  :initial="startingType">
+            <option v-for="element in elements" :key="element.value" :value="element.value">{{ element.name }}</option>
+          </select>
           <button class="btn btn-primary" type="button" @click="searchRes">Search</button>
-          
+
         </div>
       </div>
     </div>
@@ -61,37 +66,37 @@ import AlbumDataService from "./services/AlbumDataService";
 
 export default {
   name: "app",
-   components: {  },
+  components: {},
   data: () => ({
     logo,
     searchText: "",
     albums: [],
-     search: '',
-      selected: 'album',
+    search: '',
+    selected: 'album',
     elements: [
       { name: 'Albums', value: 'album' },
-        { name: 'Tracks', value: 'track' },        
-        { name: 'Artists', value: 'artist' }
-      ]
+      { name: 'Tracks', value: 'track' },
+      { name: 'Artists', value: 'artist' }
+    ]
   }),
-   computed: {
-    isActive () {
+  computed: {
+    isActive() {
       return this.search !== undefined && this.search !== null && this.search !== '';
     },
-    startingType () {
+    startingType() {
       return this.elements[0].value;
     }
   },
 
   methods: {
-      setSearch: function (search) {
-        
+    setSearch: function (search) {
+
       this.search = search;
     },
     changeType: function (type) {
-      
+
       this.type = type;
-      console.log("changed",this.type)
+      console.log("changed", this.type)
     },
     searchTitle() {
       AlbumDataService.findByTitle(this.title)
@@ -106,18 +111,20 @@ export default {
         });
     },
 
-    searchRes()
-    {
-       console.log("ssss",this.selected);
-       var params = {
-         text : this.searchText,
-         type : this.selected
-       }
-       this.$emit('searchClicked', params);
-      this.$router.push({ name: 'ss', params: { type: this.selected } , query: { q: this.searchText } })
+    searchRes() {
+      console.log("ssss", this.selected);
+      var params = {
+        text: this.searchText,
+        type: this.selected
+      }
+      this.$emit('searchClicked', params);
+      this.$router.push({ name: 'ss', params: { type: this.selected }, query: { q: this.searchText } })
 
     },
-    returnHome(){
+    tracksPage(){
+this.$router.push({ name: 'tracks' });
+    },
+    returnHome() {
       this.$router.push({ name: 'Home' });
     }
   }
@@ -132,7 +139,7 @@ export default {
   /* text-align: center; */
   color: #2c3e50;
   /* margin-top: 60px; */
-  height:1500px;
+  height: 1500px;
   background-image: linear-gradient(to bottom right, #ff7e3d, #dc3545);
 }
 
@@ -150,10 +157,18 @@ export default {
   display: inline !important;
 }
 
+.searchcategory{
+  display:inline !important;
+  width: auto !important;
+}
 
-  .type-wrapper {
-    display: inline-block;
-    margin: 0 5px;
-  }
+.nav-item{
+  cursor: pointer;
+}
 
+
+.type-wrapper {
+  display: inline-block;
+  margin: 0 5px;
+}
 </style>

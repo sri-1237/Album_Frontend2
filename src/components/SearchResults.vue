@@ -1,24 +1,24 @@
 <template>
-  <div class="card card__big margin-top-xxl">
+  <!-- <div class="card card__big margin-top-xxl"> -->
     <!-- <h2 v-if="!showDefaultSearch" class="search-title">{{ type }}s</h2> -->
 
-    <ul v-if="searchCategory == 'artist'" class="artist-list flex-list">
-      <h1>Artist</h1>
+    <ul v-if="searchCategory == 'artist'" class="artist-list flex-list mt-5">
+      <h1>Artist Results</h1>
       <!-- <Artist v-for="artist in artists" :key="artist.mbid" :artist="artist" /> -->
     </ul>
 
-    <ul v-if="searchCategory == 'album'" class="album-list flex-list">
-      <h1>Albums</h1>
+    <ul v-if="searchCategory == 'album'" class="album-list flex-list mt-5">
+      <h1>Albums Results</h1>
       <!-- <Album v-for="album in albums" :key="album.id" :album="album" /> -->
     </ul>
 
-    <ul v-if="searchCategory == 'track'" class="track-list flex-list">
-      <h1>Tracks</h1>
+    <ul v-if="searchCategory == 'track'" class="track-list flex-list mt-5">
+      <h1>Tracks Results</h1>
       <!-- <li v-for="track in tracks" :key="track.mbid" class="track-wrapper flex-no-borders">
         <Song :track="track" />
       </li> -->
     </ul>
-  </div>
+  <!-- </div> -->
   <!-- <h2>Search Results -- {{searchCategory}} and {{searchText}}</h2> -->
 
   <App @searchClicked="searchResults" />
@@ -61,10 +61,10 @@ export default {
         this.searchAlbum();
       }
       else if (this.searchCategory == 'artist') {
-        this.searchArtist();
+        // this.searchArtist();
       }
       else if (this.searchCategory == 'track') {
-        this.searchTrack();
+        // this.searchTrack();
       }
     }
   },
