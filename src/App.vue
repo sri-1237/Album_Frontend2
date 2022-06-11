@@ -13,14 +13,11 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-lg-5 ms-5 ">
-          <li class="nav-item me-3">
-            <a class="nav-link active" aria-current="page" href="#">Albums</a>
-           
+          <li class="nav-item me-3 " @click="returnHome()">
+            <p class="nav-link active" aria-current="page">Albums</p>
           </li>
 
-          <li class="nav-item dropdown">
-                      
-
+          <li class="nav-item dropdown me-3">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
               aria-expanded="false">
               Albums
@@ -40,13 +37,22 @@
              
             </ul>
           </li>
+          <li class="nav-item me-3" @click="tracksPage()">
+            <a class="nav-link" aria-current="page" href="#">Tracks</a>
+          </li>
 
         </ul>
+
+        
         <!--Search Input -->
         <div class="search-container">
-          <input class="form-control me-2 searchInput" type="search" v-model="title"
+          <input class="form-control me-2 searchInput" type="search" v-model="searchText"
             placeholder="Search by Album title">
-          <button class="btn btn-primary" type="button" @click="searchTitle">Search</button>
+          <select v-model="selected" class="form-select searchcategory"  :initial="startingType">
+            <option v-for="element in elements" :key="element.value" :value="element.value">{{ element.name }}</option>
+          </select>
+          <button class="btn btn-primary" type="button" @click="searchRes">Search</button>
+
         </div>
       </div>
     </div>
@@ -63,15 +69,41 @@
 import logo from './assets/OC-Logo.png'
 import AlbumDataService from "./services/AlbumDataService";
 
+
 export default {
   name: "app",
+  components: {},
   data: () => ({
     logo,
-    title: "",
+    searchText: "",
     albums: [],
+    search: '',
+    selected: 'album',
+    elements: [
+      { name: 'Albums', value: 'album' },
+      { name: 'Tracks', value: 'track' },
+      { name: 'Artists', value: 'artist' }
+    ]
   }),
+  computed: {
+    isActive() {
+      return this.search !== undefined && this.search !== null && this.search !== '';
+    },
+    startingType() {
+      return this.elements[0].value;
+    }
+  },
 
   methods: {
+    setSearch: function (search) {
+
+      this.search = search;
+    },
+    changeType: function (type) {
+
+      this.type = type;
+      console.log("changed", this.type)
+    },
     searchTitle() {
       AlbumDataService.findByTitle(this.title)
         .then(response => {
@@ -83,6 +115,23 @@ export default {
         .catch(e => {
           this.message = e.response.data.message;
         });
+    },
+
+    searchRes() {
+      console.log("ssss", this.selected);
+      var params = {
+        text: this.searchText,
+        type: this.selected
+      }
+      this.$emit('searchClicked', params);
+      this.$router.push({ name: 'ss', params: { type: this.selected }, query: { q: this.searchText } })
+
+    },
+    tracksPage(){
+this.$router.push({ name: 'tracks' });
+    },
+    returnHome() {
+      this.$router.push({ name: 'Home' });
     }
   }
 };
@@ -96,6 +145,7 @@ export default {
   /* text-align: center; */
   color: #2c3e50;
   /* margin-top: 60px; */
+  height: 1500px;
   background-image: linear-gradient(to bottom right, #ff7e3d, #dc3545);
 }
 
@@ -111,5 +161,20 @@ export default {
 .searchInput {
   width: 60% !important;
   display: inline !important;
+}
+
+.searchcategory{
+  display:inline !important;
+  width: auto !important;
+}
+
+.nav-item{
+  cursor: pointer;
+}
+
+
+.type-wrapper {
+  display: inline-block;
+  margin: 0 5px;
 }
 </style>

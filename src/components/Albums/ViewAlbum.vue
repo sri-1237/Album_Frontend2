@@ -21,12 +21,14 @@
 <div class="btn-group" role="group" aria-label="Basic mixed styles example">
   <button type="button" @click="goEditAlbum()">Edit</button>
   <button type="button" @click="goDeleteAlbum(album)" class="btn btn-danger">Delete</button>
-  <!-- <button type="button" @click="goAddLesson(id)" class="btn btn-success">Add Tracks</button> -->
+  <button type="button" @click="toggleModal" class="btn btn-success">Add Tracks</button>
 </div>
-  
+
+  <!-- <AddTrack :show="showModal" @close="getAlbum()" :id='album.id'> </AddTrack> -->
+  <AddTrack :showModal="showModalNow" :albumId="this.id" @closeModal="closeMyModal" :trackData ="singleTrackData"> </AddTrack>
 
   <h3>Playlist</h3>
-  <TracksDisplay v-for="track in tracks" :key="track.id" :track="track" />
+  <TracksDisplay v-for="track in tracks" :key="track.id" :track="track" @getTracks="getTracks" @editTracks="editThisTracks"/>
 
 
   <!-- <LessonDisplay
@@ -38,29 +40,34 @@
     /> -->
 
 
+
 </template>
 
 <script>
 import AlbumDataService from "../../services/AlbumDataService";
 import TracksDataService from "../../services/TracksDataService";
 import TracksDisplay from '../Tracks/TracksDisplay.vue';
+import AddTrack from "../Tracks/AddTrack.vue"
 import { Buffer } from 'buffer';
 
 export default {
   name: "view-album",
   props: ['id'],
   components: {
-    TracksDisplay
+    TracksDisplay, AddTrack
   },
   data() {
     return {
+      showModalNow: false,
       album: {},
       tracks: [],
-      message: ""
+      message: "",
+       singleTrackData:{},
     };
   },
   methods: {
     retrieveTracks() {
+       this.showModal = false;
       AlbumDataService.get(this.id)
         .then(response => {
           // this.album = response.data;
@@ -75,23 +82,26 @@ export default {
           }
 
           this.album = arr[0];
-
-          TracksDataService.getAllTracks(this.id)
-            .then(response => {
-              this.tracks = response.data
-              console.log("Tracks...", this.tracks);
-            })
-            .catch(e => {
-              this.message = e.response.data.message;
-            });
+this.getTracks();
+         
         })
         .catch(e => {
           this.message = e.response.data.message;
         });
     },
      goEditAlbum() {
-       console.log("id.....",this.id);
+      //  console.log("id.....",this.id);
       this.$router.push({ name: 'editAlbum', params: { id: this.id } });
+    },
+    getTracks(){
+       TracksDataService.getAllTracksWithAlbum(this.id)
+            .then(response => {
+              this.tracks = response.data
+              // console.log("Tracks...", this.tracks);
+            })
+            .catch(e => {
+              this.message = e.response.data.message;
+            });
     },
     // goEditLesson(lesson) {
     //   this.$router.push({ name: 'editLesson', params: { tutorialId: this.id,lessonId: lesson.id} });
@@ -99,6 +109,21 @@ export default {
     // goAddLesson() {
     //   this.$router.push({ name: 'addLesson', params: { tutorialId: this.id } });
     // },
+
+      editThisTracks(event) {
+      console.log("edittttttt", event);
+      this.singleTrackData = event;
+      this.showModalNow = true;
+    },
+
+    closeMyModal() {
+      this.showModalNow = false;
+      this.getTracks();
+    },
+    toggleModal() {
+      this.singleTrackData = null;
+      this.showModalNow = !this.showModalNow;
+    },
 
     goDeleteAlbum(album) {
       AlbumDataService.delete(album.id)
