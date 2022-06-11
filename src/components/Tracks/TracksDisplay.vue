@@ -16,6 +16,13 @@
                             </div>
                             <i class="fa-solid fa-play" v-if="!isPlaying" @click="play(track)"></i>
                             <i class="fa-solid fa-pause" v-else @click="pause"></i>
+
+                              <a href="#" data-bs-toggle="dropdown"> <i class="fa-solid fa-angle-down"></i></a>
+          <div class="dropdown-menu">
+             <i class="editIcon dropdown-item fa-solid fa-pen-to-square"  @click="goEditTrack(track)">  Edit</i>
+             <i class="deleteIcon dropdown-item fa-solid fa-trash-can ml-3"  @click="goDeleteTrack(track)">  Delete</i>         
+
+          </div>
                         </div>                  
                                     
                        </div>  
@@ -25,6 +32,8 @@
 </template>
 
 <script>
+
+import TracksDataService from "../../services/TracksDataService";
 
 export default {
   props: {
@@ -52,6 +61,24 @@ export default {
     pause () {
       this.player.pause();
       this.isPlaying = false;
+    },
+
+     goEditTrack(track) {
+       console.log("id.....",track.id);
+        this.$emit("editTracks",track);
+       
+      // this.$router.push({ name: 'editAlbum', params: { id: album.id } });
+    },
+
+     goDeleteTrack(track) {
+      TracksDataService.deleteTrack(track.albumId,track.id)
+        .then(() => {
+            this.$emit("getTracks");
+          // this.$router.push({ name: 'Home' });
+        })
+        .catch(e => {
+          this.message = e.response.data.message;
+        });
     },
 
     // deleteLesson() {

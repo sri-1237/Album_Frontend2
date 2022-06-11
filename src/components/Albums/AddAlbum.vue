@@ -46,7 +46,8 @@
 
     <div class="col-sm-6">
       <div class="form-group d-flex flex-row align-items-center trackInput" v-for="(input, k) in inputs" :key="k">
-        <input type="text" class="form-control" v-model="input.name" placeholder="Enter Song URL">
+       <input type="text" class="form-control" v-model="input.name" placeholder="Enter Song Title">
+        <input type="text" class="form-control" v-model="input.url" placeholder="Enter Song URL">
         <span id="add-delete-icons">
           <i class="fas fa-minus-circle" @click="remove(k)" v-show="k || (!k && inputs.length > 1)"></i>
           <i class="fas fa-plus-circle" @click="add(k)" v-show="k == inputs.length - 1"></i>
@@ -122,8 +123,8 @@ export default {
           // console.log("inputs..", this.inputs);
           for(var i in this.inputs) {
             var trackdata = {
-              title:"Song1",
-              description: this.inputs[i].name
+              title:this.inputs[i].name,
+              url: this.inputs[i].url
             };
              TracksDataService.createTrack(this.album.id, trackdata)
             .then(response => {
@@ -147,7 +148,7 @@ export default {
     },
     add(index) {
       console.log("index..", index);
-      this.inputs.push({ name: '' });
+      this.inputs.push({ name: '', url:"" });
     },
     remove(index) {
       this.inputs.splice(index, 1);

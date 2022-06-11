@@ -5,8 +5,7 @@ import AddAlbum from './components/Albums/AddAlbum.vue';
 import ViewAlbum from './components/Albums/ViewAlbum.vue';
 import EditAlbum from './components/Albums/EditAlbum.vue';
 import Search from './components/SearchResults.vue';
-
-
+import Tracks from './components/Tracks/TracksList.vue';
 
 const routes = [
     { path: '/', component: homePage, name: 'Home', meta: { transitionName: 'slide' } },
@@ -35,14 +34,16 @@ const routes = [
         component: Search,
         name:"ss",
         props: route => ({ query: route.query.q})
-      }
+      },
+      { path: '/tracks', component: Tracks, name: 'tracks', meta: { transitionName: 'slide' } },
     // { path: '/playlist', component: Playlist, name: 'Playlist', meta: { transitionName: 'zoom' }, beforeEnter: beforeCheckPlaylist },
     // { path: '/artist/:name', component: ArtistDetail, name: 'Artist', meta: { transitionName: 'slide' } },
     // { path: '/artist/:name/:album', component: AlbumDetail, name: 'Album', meta: { transitionName: 'slide' } }
   ];
 
   const router = createRouter({
-    base: process.env.NODE_ENV === 'development' ? '/' : '/tutorial-frontend-1/',
+    base: process.env.NODE_ENV === 'development' ? '/' : '/Album_Frontend2/',
+    // history: createWebHistory(import.meta.env.BASE_URL),
     history: createWebHistory(process.env.BASE_URL),
     routes,
   });

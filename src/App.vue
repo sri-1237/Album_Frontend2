@@ -121,6 +121,9 @@ export default {
       this.$router.push({ name: 'ss', params: { type: this.selected }, query: { q: this.searchText } })
 
     },
+    tracksPage(){
+this.$router.push({ name: 'tracks' });
+    },
     returnHome() {
       this.$router.push({ name: 'Home' });
     }
