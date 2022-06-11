@@ -20,15 +20,21 @@
           <li class="nav-item dropdown me-3">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
               aria-expanded="false">
-              Artists
+              Albums
             </a>
+              
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="#">Add New Artist</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
+              
               <li>
+                  <router-link to="/artist" >
+                <a class="dropdown-item" href="#">Artists</a>
+                </router-link>
+              </li>  
+               <li>
                 <hr class="dropdown-divider">
               </li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
+              <li><a class="dropdown-item" href="#">Tracks</a></li>
+             
             </ul>
           </li>
           <li class="nav-item me-3" @click="tracksPage()">
