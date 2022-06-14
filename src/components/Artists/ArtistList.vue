@@ -12,21 +12,8 @@
       <hr>
     </div>
 
-    <div class="profile-card-2" v-for="(artist, index) in artists" :key="index">
-      <div @click="viewArtistInfo(artist)">
-        <img :src="artist.imgURL" class="img img-responsive">
-        <div class="profile-name">{{ artist.name }}</div>
-      </div>
-
-
-      <!-- <div class="profile-username">@johndoesurname</div> -->
-      <div class="profile-icons">
-
-        <a href="#"><i class="fa fa-edit" @click.self="editArtist(artist)"></i></a>
-        <a href="#"><i class="fa fa-trash" @click="deleteArtist(artist)"></i></a>
-
-      </div>
-    </div>
+    <Artist v-for="artist in artists" :key="artist.id" :artist="artist" @viewArtist="viewArtistInfo(artist)"
+      @deleteArtist="deleteArtist(artist)" @editArtist="editArtist(artist)" />
   </div>
   <!-- </div>
 		
@@ -35,10 +22,12 @@
 
 <script>
 import ArtistDataService from "../../services/ArtistDataService";
+import Artist from "./Artist.vue";
 import { Buffer } from 'buffer';
 
 export default {
   name: "artists-list",
+  components: { Artist },
   data() {
     return {
       artists: [],

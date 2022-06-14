@@ -32,7 +32,7 @@
         <!--Search Input -->
         <div class="search-container">
           <input class="form-control me-2 searchInput" type="search" v-model="searchText"
-            placeholder="Search by Album title">
+            placeholder="Search by Album, Artist and Track title...">
           <select v-model="selected" class="form-select searchcategory" :initial="startingType">
             <option v-for="element in elements" :key="element.value" :value="element.value">{{ element.name }}</option>
           </select>
