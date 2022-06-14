@@ -3,7 +3,8 @@
     <!-- <h2 v-if="!showDefaultSearch" class="search-title">{{ type }}s</h2> -->
     <ul v-if="searchCategory == 'artist'" class="artist-list flex-list mt-5">
       <h1>Artist Results</h1>
-      <!-- <Artist v-for="artist in artists" :key="artist.mbid" :artist="artist" /> -->
+      <Artist v-for="artist in artists" :key="artist.id" :artist="artist" @viewArtist="viewArtistInfo(artist)" @deleteArtist="deleteArtist(artist)"
+        @editArtist="editArtist(artist)" />
     </ul>
 
     <div v-if="searchCategory == 'album'" class="row row-cols-2 row-cols-lg-6">
@@ -36,8 +37,10 @@
 import App from '@/App.vue';
 import AlbumDataService from "../services/AlbumDataService";
 import TracksDataService from "../services/TracksDataService";
+import ArtistDataService from "../services/ArtistDataService";
 import TracksDisplay from './Tracks/TracksDisplay.vue';
 import Album from './Albums/Album.vue';
+import Artist from './Artists/Artist.vue';
 
 import { Buffer } from 'buffer';
 
@@ -45,11 +48,12 @@ import { Buffer } from 'buffer';
 export default {
   name: "Search-results",
   props: ["type", "query"],
-  components: {App, Album, TracksDisplay},
+  components: {App, Album, TracksDisplay, Artist},
   data() {
     return {
       albums: [],
       tracks:[],
+      artists:[],
       searchCategory: this.$route.params.type,
       searchText: this.$route.query.q
     };
@@ -62,7 +66,7 @@ export default {
         this.searchAlbum();
       }
       else if (this.searchCategory == 'artist') {
-        // this.searchArtist();
+        this.searchArtist();
       }
       else if (this.searchCategory == 'track') {
         this.searchTrack();
@@ -98,6 +102,30 @@ export default {
           this.message = e.response.data.message;
         });
     },
+     searchArtist() {
+      ArtistDataService.findByTitle(this.searchText)
+        .then(response => {
+          var arr = new Array(response.data);
+
+          for (var i in arr[0]) {
+
+            let resData = arr[0][i];
+            if (resData.data != null) {
+              var blobObj = resData.data;
+              var bufferBase64 = new Buffer(blobObj.data, 'binary').toString('base64');
+              this.currentImage = "data:image/jpeg;base64," + bufferBase64;
+              arr[0][i]["imgURL"] = this.currentImage;
+            }
+
+
+          }
+          this.artists = arr[0];
+
+        })
+        .catch(e => {
+          this.message = e.response.data.message;
+        });
+    },
     searchTrack() {
       console.log("textttt",this.searchText);
       TracksDataService.findByTitle(this.searchText)
@@ -117,7 +145,7 @@ export default {
         this.searchAlbum();
       }
       else if (this.searchCategory == 'artist') {
-        // this.searchArtist();
+        this.searchArtist();
       }
       else if (this.searchCategory == 'track') {
         this.searchTrack();
@@ -141,6 +169,27 @@ export default {
           this.message = e.response.data.message;
         });
     },
+
+    //Artist CRUD operations methods
+     viewArtistInfo(artist){
+      this.$router.push({ name: 'viewArtist', params: { id: artist.id, artist: artist.name } });
+    },
+    editArtist(artist) {
+      //  console.log("id.....",album.id);
+       this.$router.push({ name: 'editArtist', params: { id: artist.id } });
+    },
+
+     deleteArtist(artist) {
+       ArtistDataService.delete(artist.id)
+        .then(() => {
+         this.searchNow();
+          // this.$router.push({ name: 'Home' });
+        })
+        .catch(e => {
+          this.message = e.response.data.message;
+        });
+    },
+
   },
 
   mounted() {
