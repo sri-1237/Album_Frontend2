@@ -162,7 +162,7 @@ export default {
           // console.log("resp...",response.data.);
        
           // this.$router.push({ name: 'viewAlbum', params: { id: this.album.id, album: this.album.title } });   
-          this.$router.push({ name: 'Home' });
+          this.$router.push({ name: 'artists' });
         })
         .catch(e => {
           this.message = e.response.data.message;
