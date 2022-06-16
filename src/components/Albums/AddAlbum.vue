@@ -1,5 +1,6 @@
 <template>
-  <h1>Add New Album</h1>
+  <h2 class="text-center">Add New Album</h2>
+  <br>
 
   <div class="row">
     <div class="col-sm-2">
@@ -22,11 +23,16 @@
 
   <div class="row">
     <div class="col-sm-2">
-      <label for="albumArtist"> Artist</label>
+      <label for="albumArtist"> Select Artist</label>
     </div>
     <div class="col-sm-8">
-      <input type="text" class="form-control" v-model="album.artist" id="album-artist" placeholder="Enter Artist Name"
-        name="title">
+      <!-- <input type="text" class="form-control" v-model="album.artist" id="album-artist" placeholder="Enter Artist Name"
+        name="title"> -->
+         <select v-on:change="onChange($event)" class="form-select" aria-label="Default select example">
+                  <option selected></option>
+                  <option :value="artist.id" v-for="artist in artists" :key="artist.id" :artist="artist">{{ artist.name }}
+                  </option>
+                </select>
     </div>
   </div>
 
@@ -46,7 +52,8 @@
 
     <div class="col-sm-6">
       <div class="form-group d-flex flex-row align-items-center trackInput" v-for="(input, k) in inputs" :key="k">
-        <input type="text" class="form-control" v-model="input.name" placeholder="Enter Song URL">
+       <input type="text" class="form-control" v-model="input.name" placeholder="Enter Song Title">
+        <input type="text" class="form-control" v-model="input.url" placeholder="Enter Song URL">
         <span id="add-delete-icons">
           <i class="fas fa-minus-circle" @click="remove(k)" v-show="k || (!k && inputs.length > 1)"></i>
           <i class="fas fa-plus-circle" @click="add(k)" v-show="k == inputs.length - 1"></i>
@@ -64,6 +71,7 @@
 <script>
 import AlbumDataService from "../../services/AlbumDataService";
 import TracksDataService from "../../services/TracksDataService";
+import ArtistDataService from "../../services/ArtistDataService";
 
 export default {
   name: "add-album",
@@ -74,7 +82,9 @@ export default {
         title: "",
         coverImg: "",
         description: "",
-        published: false
+        published: false,
+        artistId: "",
+        artist:""
       },
       inputs: [
         {
@@ -88,46 +98,66 @@ export default {
       selectedFile: null,
       currentFile: undefined,
       progress: 0, 
-      fileInfos: []
+      fileInfos: [],
+      artists:[]
     };
   },
   methods: {
+     onChange(e) {
+      console.log("eeeeeee", e.target.value);
+      console.log("trackkkkk11", this.$props.track)
+      this.album.artistId  = e.target.value;
+       this.album.artist = e.target.options[e.target.options.selectedIndex].text;
+    },
     selectFile(event) {
       this.selectedFile = event.target.files[0];
       
       console.log("test image...", this.selectedFile);
+    },
+    getAllArtists() {
+      console.log("artisttt", this.$props)
+      ArtistDataService.getAll()
+        .then(response => {
+          this.artists = response.data;
+        })
+        .catch(e => {
+          this.message = e.response.data.message;
+        });
     },
     saveAlbum() {
       // this.currentFile = this.selectedFiles.item(0);
 
       this.currentImage = this.$refs.file.files.item(0);
 
-      console.log("Imggg...",this.selectedFile);
+      // console.log("Imggg...",this.selectedFile);
 
       // this.previewImage = URL.createObjectURL(this.currentImage);
 
-      // console.log("Imggg 2222...",this.previewImage);
+      console.log("Imggg 2222...",this.album.artist );
 
       var data = {
         title: this.album.title,
-        artist: this.album.artist,
-        description: this.album.description
+        artistId: this.album.artistId,
+         artist:this.album.artist,
+        description: this.album.description,
+        
       };
 
-      console.log("Data..", data);
+      // console.log("Data..", data);
       AlbumDataService.createAlbum(data, this.selectedFile)
         .then(response => {
           this.album.id = response.data.id;
-          console.log("add album " + response.data);
-          console.log("inputs..", this.inputs);
+          // console.log("add album " + response.data);
+          // console.log("inputs..", this.inputs);
           for(var i in this.inputs) {
             var trackdata = {
-              title: this.inputs[i].name
+              title:this.inputs[i].name,
+              url: this.inputs[i].url
             };
              TracksDataService.createTrack(this.album.id, trackdata)
             .then(response => {
               this.tracks = response.data
-              console.log("Tracks...", this.tracks);
+              // console.log("Tracks...", this.tracks);
               
             })
             .catch(e => {
@@ -146,11 +176,14 @@ export default {
     },
     add(index) {
       console.log("index..", index);
-      this.inputs.push({ name: '' });
+      this.inputs.push({ name: '', url:"" });
     },
     remove(index) {
       this.inputs.splice(index, 1);
     }
+  },
+   mounted() {
+    this.getAllArtists();
   }
 }
 

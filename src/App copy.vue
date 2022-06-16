@@ -13,17 +13,17 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-lg-5 ms-5 ">
-          <li class="nav-item me-3 "  @click="returnHome()">
-            <p class="nav-link" :class="{ active: albumTab }" aria-current="page">Albums</p>
+          <li class="nav-item me-3 " @click="returnHome()">
+            <p class="nav-link active" aria-current="page">Albums</p>
           </li>
 
           <li class="nav-item me-3 " @click="artistPage()">
-            <p class="nav-link" :class="{ active: artistTab }" aria-current="page">Artists</p>
+            <p class="nav-link active" aria-current="page">Artists</p>
           </li>
 
 
           <li class="nav-item me-3" @click="tracksPage()">
-             <p class="nav-link" :class="{ active: trackTab }" aria-current="page">Tracks</p>
+            <a class="nav-link" aria-current="page" href="#">Tracks</a>
           </li>
 
         </ul>
@@ -45,10 +45,7 @@
 
   <!--Page Content -->
   <div class="container-fluid pageContent">
-    <div class="container">
-<router-view />
-    </div>
-    
+    <router-view />
   </div>
 </template>
 
@@ -71,10 +68,7 @@ export default {
       { name: 'Albums', value: 'album' },
       { name: 'Tracks', value: 'track' },
       { name: 'Artists', value: 'artist' }
-    ],
-    albumTab: false,
-    artistTab:false,
-    trackTab:false
+    ]
   }),
   computed: {
     isActive() {
@@ -119,23 +113,13 @@ export default {
 
     },
     artistPage() {
-       this.artistTab = true;
-       this.albumTab = false;
-       this.trackTab=false;
       this.$router.push({ name: 'artists' });
     },
     tracksPage() {
-       this.artistTab = false;
-       this.albumTab = false;
-       this.trackTab=true;
       this.$router.push({ name: 'tracks' });
     },
     returnHome() {
-      this.artistTab = false;
-       this.albumTab = true;
-       this.trackTab=false;
       this.$router.push({ name: 'Home' });
-      
     }
   }
 };
@@ -155,15 +139,7 @@ export default {
 
 .pageContent {
   margin-top: 6%;
-   padding-top: 40px;
-  padding-bottom: 70px;
 }
-
- /* .container-fluid {
-  max-width: 1250px;
-  padding-top: 70px;
-  padding-bottom: 70px;
-} */
 
 .search-container {
   margin-left: 10%;
@@ -182,11 +158,6 @@ export default {
 
 .nav-item {
   cursor: pointer;
-}
-
-.active{
-  background-color: #9e9e9ec4;
-  border-radius: 0.25rem;
 }
 
 

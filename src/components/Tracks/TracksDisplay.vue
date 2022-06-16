@@ -2,9 +2,9 @@
 <!-- <div class="container"> -->
     
 
-                    <div class="col-md-6">
+                    <!-- <div class="col-md-6"> -->
 
-                       <div class="p-3 card">
+                       <div class="p-2 card">
 
                         <div class="d-flex justify-content-between align-items-center p-3 music">
 
@@ -14,16 +14,26 @@
                                 <small class="ml-2" id="trackTitle"> {{ track.title }} </small>
                                 
                             </div>
-                            <i class="fa fa-check color"></i>
+                            <i class="fa-solid fa-circle-play trackIcon" v-if="!isPlaying" @click="play(track)"></i>
+                            <i class="fa-solid fa-circle-pause trackIcon" v-else @click="pause"></i>
+
+                              <a href="#" data-bs-toggle="dropdown"> <i class="fa-solid fa-angle-down"></i></a>
+          <div class="dropdown-menu">
+             <i class="editIcon dropdown-item fa-solid fa-pen-to-square"  @click="goEditTrack(track)">  Edit</i>
+             <i class="deleteIcon dropdown-item fa-solid fa-trash-can ml-3"  @click="goDeleteTrack(track)">  Delete</i>         
+
+          </div>
                         </div>                  
                                     
                        </div>  
                         
-                    </div>
+                    <!-- </div> -->
               <!-- </div> -->
 </template>
 
 <script>
+
+import TracksDataService from "../../services/TracksDataService";
 
 export default {
   props: {
@@ -31,10 +41,45 @@ export default {
   },
   data() {
     return {
+        index: 0,
+      isPlaying: false,
+       player: new Audio()
       
     };
   },
   methods: {
+      play (song) {
+        //   console.log("song...",song);
+    //   if (typeof song.src != "undefined") {
+    //     this.current = song;
+        this.player.src = song.description;
+        
+    //   }
+      this.player.play();
+      this.isPlaying = true;
+    },
+    pause () {
+      this.player.pause();
+      this.isPlaying = false;
+    },
+
+     goEditTrack(track) {
+       console.log("id.....",track.id);
+        this.$emit("editTracks",track);
+       
+      // this.$router.push({ name: 'editAlbum', params: { id: album.id } });
+    },
+
+     goDeleteTrack(track) {
+      TracksDataService.deleteTrack(track.albumId,track.id)
+        .then(() => {
+            this.$emit("getTracks");
+          // this.$router.push({ name: 'Home' });
+        })
+        .catch(e => {
+          this.message = e.response.data.message;
+        });
+    },
 
     // deleteLesson() {
     //   this.$emit("deleteLesson");
@@ -66,10 +111,14 @@ body{
 }
 
 #trackTitle{
-    color: white;
+    /* color: white; */
     padding-left: 10px;
 }
 
+#trackTitle:hover{
+    color: black;
+
+}
 
 .cant{
 
@@ -81,14 +130,16 @@ body{
 }
 
 .music{
+  color:#f3f3f3;
 
     margin-bottom: 10px;
 }
 
 
 .music:hover{
+  color:black;
 
-    background-color: #f7f7f7;
+    background-color: gainsboro;
     border-radius: 3px;
     cursor: pointer;
 }
@@ -118,6 +169,9 @@ body{
     border-color: #ff7e3d;
 }
 
+.trackIcon{
+  font-size: 30px;
+}
 
 
 .btn-danger:focus{

@@ -1,5 +1,6 @@
 <template>
-  <h1>Update Album</h1>
+  <h2 class="text-center">Update Artist</h2>
+  <br>
 
   <div>
     <div
@@ -20,12 +21,12 @@
 
   <div class="row">
     <div class="col-sm-2">
-      <label for="albumTitle"> Title</label>
+      <label for="artistName"> Name</label>
     </div>
     <div class="col-sm-8">
         
-      <input type="text" class="form-control" v-model="album.title" id="album-title" placeholder="Enter Album Title"
-        name="title">
+      <input type="text" class="form-control" v-model="artist.name" id="artist-name" placeholder="Enter Artist Name"
+        name="name">
     </div>
   </div>
 
@@ -39,38 +40,22 @@
     </div>
   </div> -->
 
-  <!-- <div class="row">
+<!--  <div class="row">
     <div class="col-sm-2">
       <label for="albumArtist"> Artist</label>
-    </div>
+    </div> 
     <div class="col-sm-8">
       <input type="text" class="form-control" v-model="album.artist" id="album-artist" placeholder="Enter Artist Name"
         name="title">
     </div>
-  </div> -->
-
-   <div class="row">
-    <div class="col-sm-2">
-      <label for="albumArtist"> Select Artist</label>
-    </div>
-    <div class="col-sm-8">
-      <!-- <input type="text" class="form-control" v-model="album.artist" id="album-artist" placeholder="Enter Artist Name"
-        name="title"> -->
-         <select v-on:change="onChange($event)" class="form-select" aria-label="Default select example">
-                <option v-if="album.artistId" selected>{{album.artist}}</option>
-  <option v-else selected></option>
-                  <option :value="artist.id" v-for="artist in artists" :key="artist.id" :artist="artist">{{ artist.name }}
-                  </option>
-                </select>
-    </div>
   </div>
-
+-->
   <div class="row">
     <div class="col-sm-2">
-      <label for="albumDesc" class="form-label">Description</label>
+      <label for="artistInfo" class="form-label">Info</label>
     </div>
     <div class="col-sm-8">
-      <textarea class="form-control" v-model="album.description" id="album-desc" rows="3"></textarea>
+      <textarea class="form-control" v-model="artist.description" id="artist-desc" rows="3"></textarea>
     </div>
   </div>
 
@@ -92,36 +77,27 @@
   </div> -->
 
 
-  <button type="button" class="btn btn-success" @click="updateAlbum()">Save</button>
+  <button type="button" class="btn btn-success" @click="updateArtist()">Save</button>
   <button type="button" class="btn btn-secondary" @click="cancel()">Cancel</button>
 
 </template>
 
 <script>
-import AlbumDataService from "../../services/AlbumDataService";
 import ArtistDataService from "../../services/ArtistDataService";
-// import TracksDataService from "../../services/TracksDataService";
 import { Buffer } from 'buffer';
 
 export default {
-  name: "edit-album",
+  name: "edit-artist",
   props: ['id'],
   data() {
     return {
-      album: {},
+      artist: {},
       message: "Enter data and click save",
       previewImage: null,
       selectedFile: null,
-      artists:[]
     };
   },
   methods: {
-     onChange(e){
-            console.log("eeeeeee",e.target.value);
-            console.log("nameee",e.target.options[e.target.options.selectedIndex].text)
-            this.album.artist = e.target.options[e.target.options.selectedIndex].text;
-            this.album.artistId = e.target.value;
-        },
       selectImage () {
         this.$refs.fileInput.click();
          
@@ -142,18 +118,9 @@ export default {
           this.$emit('input', file[0])
         }
       },
-      getArtists() {
-             ArtistDataService.getAll()
-                .then(response => {
-                    this.artists = response.data;
-                    console.log("Artists:::",this.artists)
-                })
-                .catch(e => {
-                    this.message = e.response.data.message;
-                });
-        },
-    retrieveAlbum() {
-      AlbumDataService.get(this.id)
+    retrieveArtist() {
+      console.log("a id...",this.id);
+      ArtistDataService.get(this.id)
         .then(response => {
           // this.album = response.data;
           var arr = new Array(response.data);
@@ -165,9 +132,9 @@ export default {
             var imgBase64 = "data:image/jpeg;base64," + bufferBase64;
             arr[0]["imgURL"] = imgBase64;
           }
-          this.album = arr[0];
-          console.log("alb",this.album)
-          this.previewImage=this.album.imgURL;
+          this.artist = arr[0];
+          console.log("a idaaaa...", this.artist);
+          this.previewImage=this.artist.imgURL;
 
         //   TracksDataService.getAllTracks(this.id)
         //     .then(response => {
@@ -183,35 +150,31 @@ export default {
         });
     },
 
-    updateAlbum() {
+    updateArtist() {
       var data = {
-        title: this.album.title,
-        artist:this.album.artist,
-        description: this.album.description,
-        artistId: this.album.artistId
+        name: this.artist.name,
+        description: this.artist.description
 
       };
-      
-      AlbumDataService.update(this.album.id,data, this.selectedFile)
+      ArtistDataService.update(this.artist.id,data, this.selectedFile)
         .then(response => {
-          this.album.id = response.data.id;
+          this.artist.id = response.data.id;
 
           // console.log("resp...",response.data.);
        
           // this.$router.push({ name: 'viewAlbum', params: { id: this.album.id, album: this.album.title } });   
-          this.$router.push({ name: 'Home' });
+          this.$router.push({ name: 'artists' });
         })
         .catch(e => {
           this.message = e.response.data.message;
         });
     },
     cancel(){
-        this.$router.push({ name: 'viewAlbum', params: { id: this.album.id, album: this.album.title } });   
+        this.$router.push({ name: 'viewArtist', params: { id: this.artist.id, artist: this.artist.name } });   
     }
   },
     mounted() {
-    this.retrieveAlbum();
-     this.getArtists();
+    this.retrieveArtist();
   }
 }
 
@@ -219,7 +182,7 @@ export default {
 
 <style>
 
-#albumImg2 {
+#artistImg2 {
   width: 120px;
   height: 150px;
 }

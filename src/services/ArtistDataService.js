@@ -1,19 +1,21 @@
 import http from "../http-common";
-class AlbumDataService {
+class ArtistDataService {
   getAll() {
-    return http.get("/albums");
+    return http.get("/artists");
   }
   get(id) {
-    return http.get(`/albums/${id}`);
+    return http.get(`/artists/${id}`);
   }
   create(data) {
-    return http.post("/albums", data);
+    return http.post("/artists", data);
   }
-
-  createAlbum(album, file) {
+  getAlbumsFromArtist(id){
+    return http.get(`/albums/${id}/albums`);
+  }
+  createArtist(artist, file) {
     let formData = new FormData();
     formData.append("file", file);
-    return http.post(`/albums?title=${album.title}&&artist=${album.artist}&artistId=${album.artistId}&description=${album.description}`, formData, {
+    return http.post(`/artists?name=${artist.name}&description=${artist.description}`, formData, {
       headers: {
         "Content-Type": "multipart/form-data"
       }
@@ -31,10 +33,10 @@ class AlbumDataService {
   //   return http.put(`/albums/${id}`, data);
   // }
 
-  update(id, album, file) {
+  update(id, artist, file) {
     let formData = new FormData();
     formData.append("file", file);
-    return http.put(`/albums/${id}?title=${album.title}&artist=${album.artist}&artistId=${album.artistId}&description=${album.description}`, formData, {
+    return http.put(`/artists/${id}?name=${artist.name}&description=${artist.description}`, formData, {
       headers: {
         "Content-Type": "multipart/form-data"
       }
@@ -42,15 +44,15 @@ class AlbumDataService {
   }
 
   delete(id) {
-    return http.delete(`/albums/${id}`);
+    return http.delete(`/artists/${id}`);
   }
   deleteAll() {
-    return http.delete(`/albums`);
+    return http.delete(`/artists`);
   }
   findByTitle(title) {
-    return http.get(`/albums?title=${title}`);
+    return http.get(`/artists?name=${title}`);
   }
 }
 
 
-export default new AlbumDataService();
+export default new ArtistDataService();
