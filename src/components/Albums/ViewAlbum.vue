@@ -8,33 +8,57 @@
 
 
 
-      <div class="album-info">
-     
+      <div class="row album-info">
+
+        <div class="col-4">
           <img :src="album.imgURL" class="albumImage" alt="Album Image" />
-      
-        <!-- <div class="col">
-          <br /> -->
-          <h2 class="albumTitle"> {{ album.title }}</h2>
-          <br /><br />
-          <h5>Artist : <strong>{{ album.artist }}</strong></h5>
-          <h5> Description</h5>
+
+        </div>
+        <div class="col-8">
+          <div class="btn-group albumCtrls" role="group" aria-label="Basic mixed styles example">
+        <button type="button" @click="goEditAlbum()">Edit</button>
+        <button type="button" @click="goDeleteAlbum(album)" class="btn btn-danger">Delete</button>
+        <button type="button" @click="toggleModal" class="btn btn-success">Add Tracks</button>
+
+          <div style="
+    margin-left: -250px;">
+         <h2 class="albumTitle"> {{ album.title }}</h2>
+       <h5 class="artistDetails">Artist : <strong style="text-decoration: underline; cursor:pointer" @click="viewArtist(album)">{{ album.artist }}</strong></h5>
+      </div>
+        
+      </div>
+          
+        </div>
+     
+          <div style="
+    display: inline-block;">
+
+    <h4 class="albumDesc"> Description</h4>
           <p> {{ album.description }}</p>
+
+            <!-- <h2 class="albumTitle"> {{ album.title }}</h2>
+          <br /><br />
+          <h5 class="artistDetails">Artist : <strong>{{ album.artist }}</strong></h5> -->
+
+          </div>
+          
+          
         <!-- </div> -->
 
       </div>
 
 
-      <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+      <!-- <div class="btn-group albumCtrls" role="group" aria-label="Basic mixed styles example">
         <button type="button" @click="goEditAlbum()">Edit</button>
         <button type="button" @click="goDeleteAlbum(album)" class="btn btn-danger">Delete</button>
         <button type="button" @click="toggleModal" class="btn btn-success">Add Tracks</button>
-      </div>
+      </div> -->
 
       <!-- <AddTrack :show="showModal" @close="getAlbum()" :id='album.id'> </AddTrack> -->
       <AddTrack :showModal="showModalNow" :albumId="this.id" @closeModal="closeMyModal" :trackData="singleTrackData">
       </AddTrack>
 
-      <h3>Playlist</h3>
+      <h4 class="albumDesc">Popular TRACKS</h4>
       <TracksDisplay v-for="track in tracks" :key="track.id" :track="track" @getTracks="getTracks"
         @editTracks="editThisTracks" />
 
@@ -133,6 +157,10 @@ export default {
       this.showModalNow = !this.showModalNow;
     },
 
+    viewArtist(album){
+ this.$router.push({ name: 'viewArtist', params: { id: album.artistId, artist: album.artist } });
+    },
+
     goDeleteAlbum(album) {
       AlbumDataService.delete(album.id)
         .then(() => {
@@ -176,24 +204,52 @@ section {
     height: 200px;
     border-radius: 50%;
     cursor: inherit;
-    float: left;
+    /* float: left; */
     box-sizing: border-box;
 }
 
 .album-info .albumTitle{
   font-size: 36px;
-    display: inline-block;
-    width: calc(100% - 600px);
-    margin: 0;
-    padding: 55px 0 0 10px;
-    float: left;
+    /* display: inline-block; */
+    width: auto;
+    /* margin: 0; */
+    /* padding: 55px 0 0 10px; */
+    /* float: left; */
     box-sizing: border-box;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
 
+.albumTitle{
+  margin-top: 20px;
+ margin-left: -150px;;
+}
+
+.albumDesc{
+  color: whitesmoke;
+  display: block;
+    text-transform: uppercase;
+    font-size: 18px;
+    letter-spacing: 0.75px;
+    font-weight: 300;
+    text-align: center;
+}
+
 .albumCard{
   padding: 25px;
+}
+
+.albumCtrls{
+  margin-top: -40px;
+  display: block !important;
+  float: right;
+}
+
+.artistDetails{
+  color: white;
+    margin-top: 15px;
+     margin-left: -150px;
+    
 }
 </style>

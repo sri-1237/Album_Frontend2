@@ -1,5 +1,6 @@
 <template>
-  <h1>Add New Artist</h1>
+  <h2 class="text-center">Add New Artist</h2>
+  <br>
 
   <div class="row">
     <div class="col-sm-2">

@@ -1,15 +1,18 @@
 <template>
   <!-- <div class="card card__big margin-top-xxl"> -->
     <!-- <h2 v-if="!showDefaultSearch" class="search-title">{{ type }}s</h2> -->
+    <!-- <h3>Search Results for "{{searchText}}"</h3> -->
     <ul v-if="searchCategory == 'artist'" class="artist-list flex-list mt-5">
-      <h1>Artist Results</h1>
+      <h3 v-if="artists.length">Search Results for "{{searchText}}"</h3>
+      <h3 v-else>No artists found for "{{searchText}}"</h3>
       <Artist v-for="artist in artists" :key="artist.id" :artist="artist" @viewArtist="viewArtistInfo(artist)" @deleteArtist="deleteArtist(artist)"
         @editArtist="editArtist(artist)" />
     </ul>
 
     <div v-if="searchCategory == 'album'" class="row row-cols-2 row-cols-lg-6">
      <!-- <h1>Albums Results</h1> -->
-    
+     <h3 v-if="albums.length">Search Results for "{{searchText}}"</h3>
+      <h3 v-else>No albums found for "{{searchText}}"</h3>
       <Album v-for="album in albums" :key="album.id" :album="album"  @viewAlbum="viewAlbum(album)" @deleteAlbum="deleteAlbum(album)"
         @editAlbum="editAlbum(album)" />
       
@@ -17,7 +20,9 @@
 
 
     <ul v-if="searchCategory == 'track'" class="track-list flex-list mt-5">
-      <h1>Tracks Results</h1>
+    <h3 v-if="tracks.length">Search Results for "{{searchText}}"</h3>
+      <h3 v-else>No tracks found for "{{searchText}}"</h3>
+      
       <TracksDisplay v-for="track in tracks" :key="track.id" :track="track" @getTracks="searchTrack" />
       <!-- @getTracks="getAllTracks"
     @editTracks="editThisTracks" />

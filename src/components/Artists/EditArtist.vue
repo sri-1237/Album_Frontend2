@@ -1,5 +1,6 @@
 <template>
-  <h1>Update Artist</h1>
+  <h2 class="text-center">Update Artist</h2>
+  <br>
 
   <div>
     <div

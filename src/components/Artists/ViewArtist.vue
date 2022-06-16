@@ -8,9 +8,9 @@
     </div>
     <div class="col">
       <br />
-      <h2> Name : {{ artist.name }}</h2>
+       <h2 > {{ artist.name }}</h2>
       <br /><br />
-      <h5> Info</h5>
+      <h4> BIOGRAPHY</h4>
       <p> {{ artist.description }}</p>
     </div>
 
@@ -24,8 +24,18 @@
 </div>
   
 
-  <h3>Albums</h3>
-    <div class="col-md-6">
+ <h4 class="albumListHeader"> POPULAR ALBUMS</h4>
+ <hr>
+
+   <div class="row row-cols-2 row-cols-lg-6">
+     <!-- <h1>Albums Results</h1> -->
+    
+      <Album v-for="album in albums" :key="album.id" :album="album"  BtnOptions="noShow" @viewAlbum="viewAlbum(album)" />
+      
+    </div>
+    <!-- <div class="col-md-6">
+
+
 
                        <div class="p-3 card">
 
@@ -48,8 +58,8 @@
                                     
                        </div>  
                         
-                    </div>
-  <AlbumsDisplay v-for="album in albums" :key="album.id" :album="album" />
+                    </div> -->
+  <!-- <AlbumsDisplay v-for="album in albums" :key="album.id" :album="album" /> -->
 
 
   <!-- <LessonDisplay
@@ -66,14 +76,15 @@
 <script>
 import ArtistDataService from "../../services/ArtistDataService";
 
-import AlbumsDisplay from '../Albums/AlbumsDisplay.vue';
+// import AlbumsDisplay from '../Albums/AlbumsDisplay.vue';
+import Album from '../Albums/Album.vue';
 import { Buffer } from 'buffer';
 
 export default {
   name: "view-artist",
   props: ['id'],
   components: {
-    AlbumsDisplay
+     Album
   },
   data() {
     return {
@@ -116,6 +127,9 @@ export default {
        console.log("id.....",this.id);
       this.$router.push({ name: 'editArtist', params: { id: this.id } });
     },
+    viewAlbum(album){
+ this.$router.push({ name: 'viewAlbum', params: { id: album.id, album: album.title } });
+    },
    
     goDeleteArtist(artist) {
       ArtistDataService.delete(artist.id)
@@ -140,5 +154,9 @@ export default {
 #albumImg {
   width: 600px;
   height: 400px;
+}
+
+.albumListHeader{
+  text-align: center;
 }
 </style>

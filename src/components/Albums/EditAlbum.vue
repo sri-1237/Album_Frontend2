@@ -39,13 +39,29 @@
     </div>
   </div> -->
 
-  <div class="row">
+  <!-- <div class="row">
     <div class="col-sm-2">
       <label for="albumArtist"> Artist</label>
     </div>
     <div class="col-sm-8">
       <input type="text" class="form-control" v-model="album.artist" id="album-artist" placeholder="Enter Artist Name"
         name="title">
+    </div>
+  </div> -->
+
+   <div class="row">
+    <div class="col-sm-2">
+      <label for="albumArtist"> Select Artist</label>
+    </div>
+    <div class="col-sm-8">
+      <!-- <input type="text" class="form-control" v-model="album.artist" id="album-artist" placeholder="Enter Artist Name"
+        name="title"> -->
+         <select v-on:change="onChange($event)" class="form-select" aria-label="Default select example">
+                <option v-if="album.artistId" selected>{{album.artist}}</option>
+  <option v-else selected></option>
+                  <option :value="artist.id" v-for="artist in artists" :key="artist.id" :artist="artist">{{ artist.name }}
+                  </option>
+                </select>
     </div>
   </div>
 
@@ -83,6 +99,7 @@
 
 <script>
 import AlbumDataService from "../../services/AlbumDataService";
+import ArtistDataService from "../../services/ArtistDataService";
 // import TracksDataService from "../../services/TracksDataService";
 import { Buffer } from 'buffer';
 
@@ -95,9 +112,16 @@ export default {
       message: "Enter data and click save",
       previewImage: null,
       selectedFile: null,
+      artists:[]
     };
   },
   methods: {
+     onChange(e){
+            console.log("eeeeeee",e.target.value);
+            console.log("nameee",e.target.options[e.target.options.selectedIndex].text)
+            this.album.artist = e.target.options[e.target.options.selectedIndex].text;
+            this.album.artistId = e.target.value;
+        },
       selectImage () {
         this.$refs.fileInput.click();
          
@@ -118,6 +142,16 @@ export default {
           this.$emit('input', file[0])
         }
       },
+      getArtists() {
+             ArtistDataService.getAll()
+                .then(response => {
+                    this.artists = response.data;
+                    console.log("Artists:::",this.artists)
+                })
+                .catch(e => {
+                    this.message = e.response.data.message;
+                });
+        },
     retrieveAlbum() {
       AlbumDataService.get(this.id)
         .then(response => {
@@ -132,6 +166,7 @@ export default {
             arr[0]["imgURL"] = imgBase64;
           }
           this.album = arr[0];
+          console.log("alb",this.album)
           this.previewImage=this.album.imgURL;
 
         //   TracksDataService.getAllTracks(this.id)
@@ -152,9 +187,11 @@ export default {
       var data = {
         title: this.album.title,
         artist:this.album.artist,
-        description: this.album.description
+        description: this.album.description,
+        artistId: this.album.artistId
 
       };
+      
       AlbumDataService.update(this.album.id,data, this.selectedFile)
         .then(response => {
           this.album.id = response.data.id;
@@ -174,6 +211,7 @@ export default {
   },
     mounted() {
     this.retrieveAlbum();
+     this.getArtists();
   }
 }
 

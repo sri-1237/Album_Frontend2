@@ -306,7 +306,7 @@ a:focus {
   float: left;
 }
 
-.contentHeader {
+/* .contentHeader {
   margin-top: 4% !important;
-}
+} */
 </style>

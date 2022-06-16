@@ -12,9 +12,10 @@
       <div class="card-body">
         <h5 class="card-title">{{ album.title }}</h5>
         <p class="card-text"> </p>
-        <button class="btn btn-outline-success btn-sm readMore" @click="viewAlbum">Read More</button>
-        <p class="btn btn-outline-primary btn-sm"><i class="far fa-edit" @click="editAlbum"></i></p>
-        <p class="btn btn-outline-danger btn-sm"><i class="far fa-trash-can"
+        <button v-if="BtnOptions=='noShow'" class="btn btn-outline-success btn-sm readMore" @click="viewAlbum">View Details</button>
+        <button v-else class="btn btn-outline-success btn-sm readMore" @click="viewAlbum">Read More</button>
+        <p v-if="BtnOptions!=='noShow'" class="btn btn-outline-primary btn-sm"><i class="far fa-edit" @click="editAlbum"></i></p>
+        <p v-if="BtnOptions!=='noShow'" class="btn btn-outline-danger btn-sm"><i class="far fa-trash-can"
             @click="deleteAlbum"></i></p>
       </div>
     </div>
@@ -26,7 +27,8 @@
 export default {
   name: 'Single-Album',
   props: {
-    album: Object
+    album: Object,
+    BtnOptions: String
   },
   methods: {
      viewAlbum() {

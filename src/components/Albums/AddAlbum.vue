@@ -1,5 +1,6 @@
 <template>
-  <h1>Add New Album</h1>
+  <h2 class="text-center">Add New Album</h2>
+  <br>
 
   <div class="row">
     <div class="col-sm-2">
@@ -82,7 +83,8 @@ export default {
         coverImg: "",
         description: "",
         published: false,
-        artistId: ""
+        artistId: "",
+        artist:""
       },
       inputs: [
         {
@@ -105,6 +107,7 @@ export default {
       console.log("eeeeeee", e.target.value);
       console.log("trackkkkk11", this.$props.track)
       this.album.artistId  = e.target.value;
+       this.album.artist = e.target.options[e.target.options.selectedIndex].text;
     },
     selectFile(event) {
       this.selectedFile = event.target.files[0];
@@ -130,11 +133,12 @@ export default {
 
       // this.previewImage = URL.createObjectURL(this.currentImage);
 
-      console.log("Imggg 2222...",this.album.artistId);
+      console.log("Imggg 2222...",this.album.artist );
 
       var data = {
         title: this.album.title,
         artistId: this.album.artistId,
+         artist:this.album.artist,
         description: this.album.description,
         
       };

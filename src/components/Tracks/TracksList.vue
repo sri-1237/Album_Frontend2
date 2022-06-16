@@ -1,5 +1,5 @@
 <template>
-
+<div class="container">
   <div class="row">
 
     <h2 class="text-center contentHeader">
@@ -9,10 +9,12 @@
     margin-left: -180px;">Tracks</strong>
     </h2>
     <hr>
+     <TracksDisplay v-for="track in tracks" :key="track.id" :track="track" @getTracks="getAllTracks"
+    @editTracks="editThisTracks" />
   </div>
   <AddTrack :showModal="showModalNow" @closeModal="closeMyModal" :trackData="singleTrackData"> </AddTrack>
-  <TracksDisplay v-for="track in tracks" :key="track.id" :track="track" @getTracks="getAllTracks"
-    @editTracks="editThisTracks" />
+ 
+  </div>
 </template>
 
 <script>

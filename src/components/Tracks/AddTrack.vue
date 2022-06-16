@@ -6,7 +6,8 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="staticBackdropLabel">Add New Track</h5>
+            <h5 class="modal-title" v-if="trackData == null" id="staticBackdropLabel">Add New Track</h5>
+            <h5 class="modal-title" v-else id="staticBackdropLabel">Edit Track</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
               v-on:click="$emit('closeModal')"></button>
           </div>
@@ -19,7 +20,7 @@
               <div v-if="!albumId" class="form-group">
                 <label for="album-name" class="col-form-label">Select Album</label>
                 <select v-on:change="onChange($event)" class="form-select" aria-label="Default select example">
-                  <option selected>{{albumid}}</option>
+                  <option selected>{{ this.albumName }}</option>
                   <option :value="album.id" v-for="album in albums" :key="album.id" :album="album">{{ album.title }}
                   </option>
                 </select>
@@ -33,7 +34,8 @@
           </div>
           <div class="modal-footer">
 
-            <button type="button" v-if="trackData==null" class="btn btn-primary" @click="createTracks">Save Track</button>
+            <button type="button" v-if="trackData == null" class="btn btn-primary" @click="createTracks">Save
+              Track</button>
             <button type="button" v-if="trackData" class="btn btn-primary" @click="updateTrack">Update Track</button>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
               v-on:click="$emit('closeModal')">Close</button>
@@ -61,10 +63,11 @@ export default {
   data() {
     return {
       active: this.showModal,
-      id:"",
+      id: "",
       title: "",
       url: "",
       albumid: "",
+      albumName: "",
       albums: [],
     };
   },
@@ -82,16 +85,18 @@ export default {
       handler(data) {
         if (data != null) {
           console.log("newwww", data);
-          this.id=data.id;
+          this.id = data.id;
           this.title = data.title;
           this.url = data.url;
           this.albumid = data.albumId;
+          this.getAlbumName();
         }
         else {
           console.log("nullll", data);
-          this.id="";
+          this.id = "";
           this.title = "";
           this.url = "";
+          this.albumName = "";
           this.albumid = "";
         }
 
@@ -100,7 +105,7 @@ export default {
 
     }
   },
-  
+
   methods: {
     close_modal() {
 
@@ -121,11 +126,34 @@ export default {
           this.message = e.response.data.message;
         });
     },
+    getAlbumName() {
+      console.log("albummmmmmmmmmmm", this.$props.albumId);
+      if (this.albumid) {
+        AlbumsDataService.get(this.albumid)
+          .then(response => {
+
+            console.log("albummmmm", response.data.title);
+            this.albumName = response.data.title;
+
+
+          })
+      }
+
+
+    },
     createTracks() {
       var data = {
         title: this.title,
         url: this.url
       };
+
+      if (this.$props.albumId) {
+
+        this.albumid = this.$props.albumId;
+
+      }
+
+      console.log("tttttttt", this.$props.albumId)
 
       TracksDataService.createTrack(this.albumid, data)
         .then(response => {
@@ -143,17 +171,18 @@ export default {
 
 
     },
-    updateTrack(){
+    updateTrack() {
       var data = {
         title: this.title,
-        url:this.url,
+        url: this.url,
       };
-      TracksDataService.updateTrack(this.albumid,this.id, data)
+      console.log("album id::",this.albumid);
+      TracksDataService.updateTrack(this.albumid, this.id, data)
         .then(response => {
 
-          console.log("resp...",response.data);
+          console.log("resp...", response.data);
           this.$emit("closeModal");
-       
+
         })
         .catch(e => {
           this.message = e.response.data.message;
@@ -162,6 +191,7 @@ export default {
   },
   mounted() {
     this.getAllAlbums();
+    this.getAlbumName();
   }
 };
 </script>
