@@ -6,8 +6,7 @@ module.exports = defineConfig({
 
 module.exports = {
   devServer: {
-    host: 'localhost',
-    port: 8081
+    proxy: 'https://album-0jz2.onrender.com'
   },
   publicPath: process.env.NODE_ENV === 'development' ? '/' : '/Album_Frontend2/',
 }
